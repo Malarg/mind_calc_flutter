@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:mind_calc/ui/main/di/main_screen_component.dart';
 import 'package:mind_calc/ui/main/di/main_screen_wm_builder.dart';
 import 'package:mind_calc/ui/main/main_screen_wm.dart';
+import 'package:mind_calc/ui/training_list/training_list_screen.dart';
 import 'package:mwwm/mwwm.dart';
 import 'package:surf_mwwm/surf_mwwm.dart';
 import 'package:mind_calc/data/resources/assets.dart';
@@ -26,6 +27,8 @@ class MainScreen extends MwwmWidget<MainScreenComponent> {
 class _MainScreenState extends WidgetState<MainScreenWidgetModel> {
   static const BOTTOM_BAR_ANIMATION_SPEED_COEF = 0.2;
 
+  var trainingListScreen = TrainingListScreen();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +36,9 @@ class _MainScreenState extends WidgetState<MainScreenWidgetModel> {
         streamedState: wm.selectedPageState,
         builder: (BuildContext context, MainScreenTabType state) {
           return Center(
-            child: Text(state.value.toString()),
+            child: state == MainScreenTabType.TRAINING
+                ? trainingListScreen
+                : Text(state.value.toString()),
           );
         },
       ),
