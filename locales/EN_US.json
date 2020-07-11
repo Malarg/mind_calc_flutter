@@ -1,0 +1,10 @@
+{
+  "main": {
+    "sample": "Example",
+    "save": "Save",
+    "goodMorning": "Good morning",
+    "goodAfternoon": "Good afternoon",
+    "goodEvening": "Good evening",
+    "goodNight": "Good night"
+  }
+}
