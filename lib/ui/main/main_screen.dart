@@ -32,6 +32,7 @@ class _MainScreenState extends WidgetState<MainScreenWidgetModel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ProjectColors.iceBlue,
       body: StreamedStateBuilder<MainScreenTabType>(
         streamedState: wm.selectedPageState,
         builder: (BuildContext context, MainScreenTabType state) {

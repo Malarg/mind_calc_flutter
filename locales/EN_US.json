@@ -5,6 +5,15 @@
     "goodMorning": "Good morning",
     "goodAfternoon": "Good afternoon",
     "goodEvening": "Good evening",
-    "goodNight": "Good night"
+    "goodNight": "Good night",
+    "leaderboard": "Leaderboard",
+    "achievements": "Achievements",
+    "happyPractice": "enjoy practice!",
+    "qualityTitle": "Quality",
+    "qualityDescription": "Try not to make mistakes",
+    "speedTitle": "Speed",
+    "speedDescription": "You have just a minute",
+    "zenTitle": "Zen",
+    "zenDescription": "No limits. Enjoy!"
   }
 }

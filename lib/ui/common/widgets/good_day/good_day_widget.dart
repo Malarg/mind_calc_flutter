@@ -26,14 +26,12 @@ class _GoodDayWidgetState extends WidgetState<GoodDayWidgetModel> {
     return StreamedStateBuilder(
       streamedState: wm.dayPeriodState,
       builder: (BuildContext context, DayPeriod period) {
-        return Center(
-          child: Text(
-            _getDayPeriodString(period),
-            style: TextStyle(
-              fontSize: 25,
-              fontFamily: "Montserrat",
-              fontWeight: FontWeight.w700,
-            ),
+        return Text(
+          _getDayPeriodString(period),
+          style: TextStyle(
+            fontSize: 25,
+            fontFamily: "Montserrat",
+            fontWeight: FontWeight.w700,
           ),
         );
       },

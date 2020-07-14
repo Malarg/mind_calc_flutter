@@ -3,6 +3,15 @@
     "goodMorning": "Доброе утро",
     "goodAfternoon": "Добрый день",
     "goodEvening": "Добрый вечер",
-    "goodNight": "Доброй ночи"
+    "goodNight": "Доброй ночи",
+    "leaderboard": "Доска лидеров",
+    "achievements": "Достижения",
+    "happyPractice": "приятной тренировки!",
+    "qualityTitle": "Качество",
+    "qualityDescription": "Стремитесь не допускать ошибок",
+    "speedTitle": "Скорость",
+    "speedDescription": "У вас всего минута",
+    "zenTitle": "Дзен",
+    "zenDescription": "Никаких ограничений. Наслаждайтесь!"
   }
 }

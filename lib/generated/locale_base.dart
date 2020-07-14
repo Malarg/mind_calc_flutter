@@ -35,4 +35,13 @@ class Localemain {
   String get goodAfternoon => _data["goodAfternoon"];
   String get goodEvening => _data["goodEvening"];
   String get goodNight => _data["goodNight"];
+  String get leaderboard => _data["leaderboard"];
+  String get achievements => _data["achievements"];
+  String get happyPractice => _data["happyPractice"];
+  String get qualityTitle => _data["qualityTitle"];
+  String get qualityDescription => _data["qualityDescription"];
+  String get speedTitle => _data["speedTitle"];
+  String get speedDescription => _data["speedDescription"];
+  String get zenTitle => _data["zenTitle"];
+  String get zenDescription => _data["zenDescription"];
 }
