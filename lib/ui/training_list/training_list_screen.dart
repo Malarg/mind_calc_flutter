@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mind_calc/data/resources/assets.dart';
 import 'package:mind_calc/data/resources/colors.dart';
+import 'package:mind_calc/domain/calculation/calculation_provider.dart';
 import 'package:mind_calc/generated/locale_base.dart';
 import 'package:mind_calc/ui/common/widgets/good_day/good_day_widget.dart';
 import 'package:mind_calc/ui/training_list/training_list_screen_wm.dart';
@@ -139,7 +140,10 @@ class _TrainingListScreenState
     return SizedBox(
       height: 80,
       child: FlatButton(
-        onPressed: () {},
+        onPressed: () { 
+          var calcProvider = CalculationProvider();
+          calcProvider.getCalculation(10);
+        },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
