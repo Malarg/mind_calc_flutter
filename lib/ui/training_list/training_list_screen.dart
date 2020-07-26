@@ -49,7 +49,9 @@ class _TrainingListScreenState
             loc.main.achievements,
             () => {},
           ),
-          Expanded(child: Container(),),
+          Expanded(
+            child: Container(),
+          ),
           Container(child: GoodDayWidget(), alignment: Alignment.centerLeft),
           SizedBox(height: 2),
           _buildHappyTrainingText(),
@@ -141,10 +143,17 @@ class _TrainingListScreenState
     return SizedBox(
       height: 80,
       child: FlatButton(
-        onPressed: () async { 
+        onPressed: () async {
           var prefs = await SharedPreferences.getInstance();
           var calcProvider = CalculationProvider(prefs);
-          calcProvider.getCalculation(100);
+          calcProvider.getCalculation(100, true, [
+            CalculationAction.PLUS,
+            CalculationAction.MINUS,
+            CalculationAction.MULTIPLY,
+            CalculationAction.DIVIDE,
+            CalculationAction.PERCENT,
+            CalculationAction.POW,
+          ]);
         },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),

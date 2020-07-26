@@ -12,7 +12,8 @@ class CalculationProvider {
   CalculationProvider(this.preferences);
 
   /// Возвращает пару значений, где первое - пример, второе - значение на месте "?"
-  Tuple2<String, int> getCalculation(int level) {
+  Tuple2<String, int> getCalculation(int level, bool isEquationEnabled,
+      List<CalculationAction> acceedOperations) {
     print("Алгоритм генерации примеров начал работу.");
 
     var calcItemCount = _getCalcItemsCount();
@@ -52,7 +53,7 @@ class CalculationProvider {
       });
 
       var allowedOperations = _getAllowedOperationsForNumbers(
-          resultString, numbersPositions, allowedRanges);
+          resultString, numbersPositions, allowedRanges, acceedOperations);
       print("Определены допустимые операции для каждого числа в строке:");
       allowedOperations.forEach((pos, operations) {
         var mergedOperations = operations.map((e) => e.value).join(" ");
@@ -62,7 +63,7 @@ class CalculationProvider {
 
       if (allowedOperations.isEmpty) {
         print("Допустимые операции не найдены. Возврат к началу алгоритма");
-        return getCalculation(level);
+        return getCalculation(level, isEquationEnabled, acceedOperations);
       }
 
       var nextOperation = _getNextOperation(allowedOperations, resultString);
@@ -79,20 +80,30 @@ class CalculationProvider {
       print("промежуточный вариант строки: $resultString");
       currentItemsCount++;
     }
-    resultString = resultString + " = " + calcResult.toString();
-    var randomNumberPosition = _getNumbersPosition(resultString).random();
-    var randomNumber = int.parse(resultString.substring(randomNumberPosition.item1, randomNumberPosition.item2));
-    resultString = resultString.substring(0, randomNumberPosition.item1) + "?" + resultString.substring(randomNumberPosition.item2);
-    print(resultString);
-    print("Ответ: " + randomNumber.toString());
-    print("Алгоритм генерации примеров завершил работу");
-    return Tuple2<String, int>(resultString, randomNumber);
+    if (isEquationEnabled) {
+      resultString = resultString + " = " + calcResult.toString();
+      var randomNumberPosition = _getNumbersPosition(resultString).random();
+      var randomNumber = int.parse(resultString.substring(
+          randomNumberPosition.item1, randomNumberPosition.item2));
+      resultString = resultString.substring(0, randomNumberPosition.item1) +
+          "?" +
+          resultString.substring(randomNumberPosition.item2);
+      print(resultString);
+      print("Ответ: " + randomNumber.toString());
+      print("Алгоритм генерации примеров завершил работу");
+      return Tuple2<String, int>(resultString, randomNumber);
+    } else {
+      resultString = resultString + " = ?";
+      print("Ответ: " + calcResult.toString());
+      print("Алгоритм генерации примеров завершил работу");
+      return Tuple2<String, int>(resultString, calcResult);
+    }
   }
 
   ///Возвращает позицию числа для разбиения
-  Tuple2<int, int> _getNumberForOperation(_CalculationAction nextOperation,
-      Map<Tuple2<int, int>, List<_CalculationAction>> allowedOperations) {
-    Map<Tuple2<int, int>, List<_CalculationAction>> filteredAllowedOperations =
+  Tuple2<int, int> _getNumberForOperation(CalculationAction nextOperation,
+      Map<Tuple2<int, int>, List<CalculationAction>> allowedOperations) {
+    Map<Tuple2<int, int>, List<CalculationAction>> filteredAllowedOperations =
         {};
     allowedOperations.forEach((key, value) {
       if (value.contains(nextOperation)) {
@@ -102,14 +113,6 @@ class CalculationProvider {
     return filteredAllowedOperations.keys.toList().random();
   }
 
-  ///1: 0-20
-  ///2: 21-35
-  ///3: 35-50
-  ///4: 51-65
-  ///5: 66-75
-  ///6: 76-85
-  ///7: 86-95
-  ///8: 96-100
   int _getCalcItemsCount() {
     var rand = Random();
     var randValue = rand.nextInt(100);
@@ -181,16 +184,19 @@ class CalculationProvider {
   }
 
   ///Определяет допустимые операции для каждого числа. Числа передаются через позиции подстроки входящей строки
-  Map<Tuple2<int, int>, List<_CalculationAction>>
+  Map<Tuple2<int, int>, List<CalculationAction>>
       _getAllowedOperationsForNumbers(
-          String inputString,
-          List<Tuple2<int, int>> numbersPositions,
-          _OperationRangeValues ranges) {
-    Map<Tuple2<int, int>, List<_CalculationAction>> result = {};
+    String inputString,
+    List<Tuple2<int, int>> numbersPositions,
+    _OperationRangeValues ranges,
+    List<CalculationAction> acceedOperations,
+  ) {
+    Map<Tuple2<int, int>, List<CalculationAction>> result = {};
     numbersPositions.forEach((numberString) {
       var number = int.parse(
           inputString.substring(numberString.item1, numberString.item2));
-      var allowedOperations = _buildAllowedOperations(number, ranges);
+      var allowedOperations =
+          _buildAllowedOperations(number, ranges).intersect(acceedOperations);
       if (allowedOperations.isNotEmpty) {
         result[numberString] = allowedOperations;
       }
@@ -198,36 +204,36 @@ class CalculationProvider {
     return result;
   }
 
-  List<_CalculationAction> _buildAllowedOperations(
+  List<CalculationAction> _buildAllowedOperations(
       int number, _OperationRangeValues ranges) {
-    List<_CalculationAction> allowedOperations = <_CalculationAction>[];
+    List<CalculationAction> allowedOperations = <CalculationAction>[];
     if (_canSplitWithPlus(number, ranges.sumRange)) {
-      allowedOperations.add(_CalculationAction.PLUS);
+      allowedOperations.add(CalculationAction.PLUS);
     }
     if (_canSplitWithMinus(number, ranges.minusRange)) {
-      allowedOperations.add(_CalculationAction.MINUS);
+      allowedOperations.add(CalculationAction.MINUS);
     }
     if (_canSplitWithMultiply(number, ranges.multiplyRange)) {
-      allowedOperations.add(_CalculationAction.MULTIPLY);
+      allowedOperations.add(CalculationAction.MULTIPLY);
     }
     if (_canSplitWithDivide(number, ranges.divideRange)) {
-      allowedOperations.add(_CalculationAction.DIVIDE);
+      allowedOperations.add(CalculationAction.DIVIDE);
     }
     if (_canSplitWithPow(number, ranges.powRange)) {
-      allowedOperations.add(_CalculationAction.POW);
+      allowedOperations.add(CalculationAction.POW);
     }
     if (_canSplitWithPercent(number, ranges.percentRange)) {
-      allowedOperations.add(_CalculationAction.PERCENT);
+      allowedOperations.add(CalculationAction.PERCENT);
     }
     return allowedOperations;
   }
 
   ///Определяет следующее действие для разбиения
-  _CalculationAction _getNextOperation(
-      Map<Tuple2<int, int>, List<_CalculationAction>> allowedOperations,
+  CalculationAction _getNextOperation(
+      Map<Tuple2<int, int>, List<CalculationAction>> allowedOperations,
       String resultString) {
     var totalOperationsCount = _getTotalOperationCount();
-    _CalculationAction result;
+    CalculationAction result;
     for (var fOperation in totalOperationsCount) {
       for (var aOperation in allowedOperations.values) {
         if (aOperation.any((elem) => fOperation.item1.value == elem.value) &&
@@ -240,19 +246,19 @@ class CalculationProvider {
   }
 
   ///Возвращает количество уже сгенерированных действий для каждого из них в порядке возрастания
-  List<Tuple2<_CalculationAction, int>> _getTotalOperationCount() {
-    List<Tuple2<_CalculationAction, int>> result = [];
-    result.add(Tuple2<_CalculationAction, int>(_CalculationAction.PLUS,
+  List<Tuple2<CalculationAction, int>> _getTotalOperationCount() {
+    List<Tuple2<CalculationAction, int>> result = [];
+    result.add(Tuple2<CalculationAction, int>(CalculationAction.PLUS,
         preferences.getInt(PrefsValues.calcPlusCount)));
-    result.add(Tuple2<_CalculationAction, int>(_CalculationAction.MINUS,
+    result.add(Tuple2<CalculationAction, int>(CalculationAction.MINUS,
         preferences.getInt(PrefsValues.calcMinusCount)));
-    result.add(Tuple2<_CalculationAction, int>(_CalculationAction.MULTIPLY,
+    result.add(Tuple2<CalculationAction, int>(CalculationAction.MULTIPLY,
         preferences.getInt(PrefsValues.calcMultiplyCount)));
-    result.add(Tuple2<_CalculationAction, int>(_CalculationAction.DIVIDE,
+    result.add(Tuple2<CalculationAction, int>(CalculationAction.DIVIDE,
         preferences.getInt(PrefsValues.calcDivideCount)));
-    result.add(Tuple2<_CalculationAction, int>(
-        _CalculationAction.POW, preferences.getInt(PrefsValues.calcPowCount)));
-    result.add(Tuple2<_CalculationAction, int>(_CalculationAction.PERCENT,
+    result.add(Tuple2<CalculationAction, int>(
+        CalculationAction.POW, preferences.getInt(PrefsValues.calcPowCount)));
+    result.add(Tuple2<CalculationAction, int>(CalculationAction.PERCENT,
         preferences.getInt(PrefsValues.calcPercentCount)));
     result.sort((a, b) {
       if (a.item2 < b.item2) {
@@ -271,37 +277,37 @@ class CalculationProvider {
       String resultString,
       _OperationRangeValues ranges,
       Tuple2<int, int> numberForOperation,
-      _CalculationAction nextOperation) {
+      CalculationAction nextOperation) {
     String _splittedNumber;
     var number = int.parse(resultString.substring(
         numberForOperation.item1, numberForOperation.item2));
     switch (nextOperation) {
-      case _CalculationAction.PLUS:
+      case CalculationAction.PLUS:
         {
           _splittedNumber = _splitWithPlusOrMinus(number, ranges.sumRange);
         }
         break;
-      case _CalculationAction.MINUS:
+      case CalculationAction.MINUS:
         {
           _splittedNumber = _splitWithPlusOrMinus(number, ranges.minusRange);
         }
         break;
-      case _CalculationAction.MULTIPLY:
+      case CalculationAction.MULTIPLY:
         {
           _splittedNumber = _splitWithMultiply(number, ranges.multiplyRange);
         }
         break;
-      case _CalculationAction.DIVIDE:
+      case CalculationAction.DIVIDE:
         {
           _splittedNumber = _splitWithDivide(number, ranges.divideRange);
         }
         break;
-      case _CalculationAction.POW:
+      case CalculationAction.POW:
         {
           _splittedNumber = _splitWithPow(number, ranges.powRange);
         }
         break;
-      case _CalculationAction.PERCENT:
+      case CalculationAction.PERCENT:
         {
           _splittedNumber = _splitWithPercent(number, ranges.percentRange);
         }
@@ -446,35 +452,35 @@ class CalculationProvider {
   }
 
   ///Увеличивает в преференсах счетчик операций для указанной операции
-  void _incrementOperationCount(_CalculationAction operation) {
+  void _incrementOperationCount(CalculationAction operation) {
     var operationPrefString;
     switch (operation) {
-      case (_CalculationAction.PLUS):
+      case (CalculationAction.PLUS):
         {
           operationPrefString = PrefsValues.calcPlusCount;
         }
         break;
-      case (_CalculationAction.MINUS):
+      case (CalculationAction.MINUS):
         {
           operationPrefString = PrefsValues.calcMinusCount;
         }
         break;
-      case (_CalculationAction.MULTIPLY):
+      case (CalculationAction.MULTIPLY):
         {
           operationPrefString = PrefsValues.calcMultiplyCount;
         }
         break;
-      case (_CalculationAction.DIVIDE):
+      case (CalculationAction.DIVIDE):
         {
           operationPrefString = PrefsValues.calcDivideCount;
         }
         break;
-      case (_CalculationAction.POW):
+      case (CalculationAction.POW):
         {
           operationPrefString = PrefsValues.calcPowCount;
         }
         break;
-      case (_CalculationAction.PERCENT):
+      case (CalculationAction.PERCENT):
         {
           operationPrefString = PrefsValues.calcPercentCount;
         }
@@ -486,7 +492,7 @@ class CalculationProvider {
 
   ///Возвращает ближайшее действие для входящей подстроки с указаной позициив указанном направлении.
   ///1 - движение вправо. -1 - движение влево
-  _CalculationAction _getNearestAction(
+  CalculationAction _getNearestAction(
       String str, int startPosition, int direction) {
     var currentPosition = startPosition;
     while (true) {
@@ -498,22 +504,22 @@ class CalculationProvider {
         return null;
       }
       if (str[currentPosition] == "+") {
-        return _CalculationAction.PLUS;
+        return CalculationAction.PLUS;
       }
       if (str[currentPosition] == "-") {
-        return _CalculationAction.MINUS;
+        return CalculationAction.MINUS;
       }
       if (str[currentPosition] == "*") {
-        return _CalculationAction.MULTIPLY;
+        return CalculationAction.MULTIPLY;
       }
       if (str[currentPosition] == "/") {
-        return _CalculationAction.DIVIDE;
+        return CalculationAction.DIVIDE;
       }
       if (str[currentPosition] == "%") {
-        return _CalculationAction.PERCENT;
+        return CalculationAction.PERCENT;
       }
       if (str[currentPosition] == "^") {
-        return _CalculationAction.POW;
+        return CalculationAction.POW;
       }
       currentPosition += direction;
     }
@@ -526,99 +532,99 @@ class CalculationProvider {
   List<_WrapActionWithBracketRule> _buildWrapBracketRules() {
     return [
       _WrapActionWithBracketRule(
-        action: _CalculationAction.PLUS,
+        action: CalculationAction.PLUS,
         leftActions: [
-          _CalculationAction.MINUS,
-          _CalculationAction.MULTIPLY,
-          _CalculationAction.DIVIDE,
-          _CalculationAction.PERCENT,
-          _CalculationAction.POW,
+          CalculationAction.MINUS,
+          CalculationAction.MULTIPLY,
+          CalculationAction.DIVIDE,
+          CalculationAction.PERCENT,
+          CalculationAction.POW,
         ],
         rightActions: [
-          _CalculationAction.MULTIPLY,
-          _CalculationAction.DIVIDE,
-          _CalculationAction.PERCENT,
-          _CalculationAction.POW,
+          CalculationAction.MULTIPLY,
+          CalculationAction.DIVIDE,
+          CalculationAction.PERCENT,
+          CalculationAction.POW,
         ],
       ),
       _WrapActionWithBracketRule(
-        action: _CalculationAction.MINUS,
+        action: CalculationAction.MINUS,
         leftActions: [
-          _CalculationAction.MINUS,
-          _CalculationAction.MULTIPLY,
-          _CalculationAction.DIVIDE,
-          _CalculationAction.PERCENT,
-          _CalculationAction.POW,
+          CalculationAction.MINUS,
+          CalculationAction.MULTIPLY,
+          CalculationAction.DIVIDE,
+          CalculationAction.PERCENT,
+          CalculationAction.POW,
         ],
         rightActions: [
-          _CalculationAction.MULTIPLY,
-          _CalculationAction.DIVIDE,
-          _CalculationAction.PERCENT,
-          _CalculationAction.POW,
+          CalculationAction.MULTIPLY,
+          CalculationAction.DIVIDE,
+          CalculationAction.PERCENT,
+          CalculationAction.POW,
         ],
       ),
       _WrapActionWithBracketRule(
-        action: _CalculationAction.MULTIPLY,
+        action: CalculationAction.MULTIPLY,
         leftActions: [
-          _CalculationAction.MULTIPLY,
-          _CalculationAction.DIVIDE,
-          _CalculationAction.PERCENT,
-          _CalculationAction.POW,
+          CalculationAction.MULTIPLY,
+          CalculationAction.DIVIDE,
+          CalculationAction.PERCENT,
+          CalculationAction.POW,
         ],
         rightActions: [
-          _CalculationAction.MULTIPLY,
-          _CalculationAction.DIVIDE,
-          _CalculationAction.PERCENT,
-          _CalculationAction.POW,
+          CalculationAction.MULTIPLY,
+          CalculationAction.DIVIDE,
+          CalculationAction.PERCENT,
+          CalculationAction.POW,
         ],
       ),
       _WrapActionWithBracketRule(
-        action: _CalculationAction.DIVIDE,
+        action: CalculationAction.DIVIDE,
         leftActions: [
-          _CalculationAction.MULTIPLY,
-          _CalculationAction.DIVIDE,
-          _CalculationAction.PERCENT,
-          _CalculationAction.POW,
+          CalculationAction.MULTIPLY,
+          CalculationAction.DIVIDE,
+          CalculationAction.PERCENT,
+          CalculationAction.POW,
         ],
         rightActions: [
-          _CalculationAction.MULTIPLY,
-          _CalculationAction.DIVIDE,
-          _CalculationAction.PERCENT,
-          _CalculationAction.POW,
+          CalculationAction.MULTIPLY,
+          CalculationAction.DIVIDE,
+          CalculationAction.PERCENT,
+          CalculationAction.POW,
         ],
       ),
       _WrapActionWithBracketRule(
-        action: _CalculationAction.PERCENT,
+        action: CalculationAction.PERCENT,
         leftActions: [
-          _CalculationAction.PLUS,
-          _CalculationAction.MINUS,
-          _CalculationAction.MULTIPLY,
-          _CalculationAction.DIVIDE,
-          _CalculationAction.PERCENT,
-          _CalculationAction.POW,
+          CalculationAction.PLUS,
+          CalculationAction.MINUS,
+          CalculationAction.MULTIPLY,
+          CalculationAction.DIVIDE,
+          CalculationAction.PERCENT,
+          CalculationAction.POW,
         ],
         rightActions: [
-          _CalculationAction.PLUS,
-          _CalculationAction.MINUS,
-          _CalculationAction.MULTIPLY,
-          _CalculationAction.DIVIDE,
-          _CalculationAction.PERCENT,
-          _CalculationAction.POW,
+          CalculationAction.PLUS,
+          CalculationAction.MINUS,
+          CalculationAction.MULTIPLY,
+          CalculationAction.DIVIDE,
+          CalculationAction.PERCENT,
+          CalculationAction.POW,
         ],
       ),
       _WrapActionWithBracketRule(
-        action: _CalculationAction.POW,
+        action: CalculationAction.POW,
         leftActions: [
-          _CalculationAction.MULTIPLY,
-          _CalculationAction.DIVIDE,
-          _CalculationAction.PERCENT,
-          _CalculationAction.POW,
+          CalculationAction.MULTIPLY,
+          CalculationAction.DIVIDE,
+          CalculationAction.PERCENT,
+          CalculationAction.POW,
         ],
         rightActions: [
-          _CalculationAction.MULTIPLY,
-          _CalculationAction.DIVIDE,
-          _CalculationAction.PERCENT,
-          _CalculationAction.POW,
+          CalculationAction.MULTIPLY,
+          CalculationAction.DIVIDE,
+          CalculationAction.PERCENT,
+          CalculationAction.POW,
         ],
       ),
     ];
@@ -651,17 +657,27 @@ extension ListOperationExtension<T> on List<T> {
     var rand = Random();
     return this[rand.nextInt(length)];
   }
+
+  List<T> intersect(List<T> anotherList) {
+    var result = <T>[];
+    anotherList.forEach((element) {
+      if (this.contains(element)) {
+        result.add(element);
+      }
+    });
+    return result;
+  }
 }
 
-class _CalculationAction extends Enum<String> {
-  const _CalculationAction(String value) : super(value);
+class CalculationAction extends Enum<String> {
+  const CalculationAction(String value) : super(value);
 
-  static const PLUS = _CalculationAction("PLUS");
-  static const MINUS = _CalculationAction("MINUS");
-  static const MULTIPLY = _CalculationAction("MULTIPLY");
-  static const DIVIDE = _CalculationAction("DIVIDE");
-  static const PERCENT = _CalculationAction("PERCENT");
-  static const POW = _CalculationAction("POW");
+  static const PLUS = CalculationAction("PLUS");
+  static const MINUS = CalculationAction("MINUS");
+  static const MULTIPLY = CalculationAction("MULTIPLY");
+  static const DIVIDE = CalculationAction("DIVIDE");
+  static const PERCENT = CalculationAction("PERCENT");
+  static const POW = CalculationAction("POW");
 }
 
 class _OperationRangeValues {
@@ -682,9 +698,9 @@ class _OperationRangeValues {
 }
 
 class _WrapActionWithBracketRule {
-  _CalculationAction action;
-  List<_CalculationAction> leftActions;
-  List<_CalculationAction> rightActions;
+  CalculationAction action;
+  List<CalculationAction> leftActions;
+  List<CalculationAction> rightActions;
   _WrapActionWithBracketRule(
       {this.action, this.leftActions, this.rightActions});
 }
