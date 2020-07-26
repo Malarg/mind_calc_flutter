@@ -7,6 +7,7 @@ import 'package:mind_calc/generated/locale_base.dart';
 import 'package:mind_calc/ui/common/widgets/good_day/good_day_widget.dart';
 import 'package:mind_calc/ui/training_list/training_list_screen_wm.dart';
 import 'package:mwwm/mwwm.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:surf_mwwm/surf_mwwm.dart';
 import 'package:mind_calc/ui/training_list/di/training_list_screen_component.dart';
 
@@ -140,9 +141,10 @@ class _TrainingListScreenState
     return SizedBox(
       height: 80,
       child: FlatButton(
-        onPressed: () { 
-          var calcProvider = CalculationProvider();
-          calcProvider.getCalculation(10);
+        onPressed: () async { 
+          var prefs = await SharedPreferences.getInstance();
+          var calcProvider = CalculationProvider(prefs);
+          calcProvider.getCalculation(100);
         },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
