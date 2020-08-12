@@ -7,4 +7,6 @@ class ProjectColors {
   static const Color purpleishBlue = Color(0xff4766ee);
   static const Color greenBlue = Color(0xff00cc90);
   static const Color pinkishOrange = Color(0xffff6d2a);
+  static const Color duscTwo = Color(0xff3a3959);
+  static const Color salmonPink = Color(0xffff6f76);
 }

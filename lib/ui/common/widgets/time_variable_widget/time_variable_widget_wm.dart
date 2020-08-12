@@ -18,9 +18,9 @@ class TimeVariableWidgetModel extends WidgetModel {
     var currentTime = DateTime.now();
     endTime = currentTime.add(timerDuration);
     leftTimeState.accept(timerDuration);
-    timer = Timer.periodic(timerStep, (t) { 
+    timer = Timer.periodic(timerStep, (t) {
       currentTime = DateTime.now();
-      if(endTime.isBefore(currentTime)) {
+      if (endTime.isBefore(currentTime)) {
         leftTimeState.accept(Duration());
         timerFinishedCommand.accept();
         t.cancel();

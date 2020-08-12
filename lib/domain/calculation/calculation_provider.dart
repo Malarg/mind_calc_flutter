@@ -366,11 +366,11 @@ class CalculationProvider {
 
   ///Определяет, возможно ли разбить число на частное с учетом диапазона
   bool _canSplitWithDivide(int value, Tuple2<int, int> range) =>
-      range.contains(value * 2 + 2);
+      range.contains(value * 2 + 2) && value > 0;
 
   ///Определяет, возможно ли разбить число на возведение в степень с учетом диапазона
   bool _canSplitWithPow(int value, Tuple2<int, int> range) {
-    if (value == 0) {
+    if (value == 0 || value == 1) {
       return false;
     }
     bool result = false;
@@ -404,12 +404,12 @@ class CalculationProvider {
   String _splitWithMultiply(int value, Tuple2<int, int> range) {
     var item1 = _getAllDividers(value).random();
     var item2 = value ~/ item1;
-    return item1.toString() + " * " + item2.toString();
+    return item1.toString() + " ⨯ " + item2.toString();
   }
 
   String _splitWithDivide(int value, Tuple2<int, int> range) {
     var divider = range.random();
-    return (value * divider).toString() + " / " + divider.toString();
+    return (value * divider).toString() + " ÷ " + divider.toString();
   }
 
   String _splitWithPow(int value, Tuple2<int, int> range) {
@@ -509,10 +509,10 @@ class CalculationProvider {
       if (str[currentPosition] == "-") {
         return CalculationAction.MINUS;
       }
-      if (str[currentPosition] == "*") {
+      if (str[currentPosition] == "⨯") {
         return CalculationAction.MULTIPLY;
       }
-      if (str[currentPosition] == "/") {
+      if (str[currentPosition] == "÷") {
         return CalculationAction.DIVIDE;
       }
       if (str[currentPosition] == "%") {

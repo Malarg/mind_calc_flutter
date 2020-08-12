@@ -1,9 +1,19 @@
+import 'package:flutter/material.dart';
+import 'package:mind_calc/ui/training/training_screen_route.dart';
+import 'package:mind_calc/ui/training/training_screen_wm.dart';
 import 'package:mwwm/mwwm.dart';
 import 'package:surf_util/surf_util.dart';
 import 'package:relation/relation.dart';
 
 ///Виджет модель виджета списка тренировок
 class TrainingListScreenWidgetModel extends WidgetModel {
-  TrainingListScreenWidgetModel(WidgetModelDependencies baseDependencies)
+
+  final NavigatorState _navigator;
+
+  TrainingListScreenWidgetModel(WidgetModelDependencies baseDependencies, this._navigator)
       : super(baseDependencies);
+
+  void navigateToTraining(TrainingType type) {
+    _navigator.push(TrainingScreenRoute(type));
+  }
 }

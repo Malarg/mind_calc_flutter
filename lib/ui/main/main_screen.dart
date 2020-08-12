@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:mind_calc/ui/main/di/main_screen_component.dart';
 import 'package:mind_calc/ui/main/di/main_screen_wm_builder.dart';
 import 'package:mind_calc/ui/main/main_screen_wm.dart';
+import 'package:mind_calc/ui/training/training_screen.dart';
 import 'package:mind_calc/ui/training_list/training_list_screen.dart';
 import 'package:mwwm/mwwm.dart';
 import 'package:surf_mwwm/surf_mwwm.dart';

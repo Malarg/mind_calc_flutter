@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mind_calc/data/resources/assets.dart';
 import 'package:mind_calc/data/resources/colors.dart';
-import 'package:mind_calc/domain/calculation/calculation_provider.dart';
 import 'package:mind_calc/generated/locale_base.dart';
 import 'package:mind_calc/ui/common/widgets/good_day/good_day_widget.dart';
+import 'package:mind_calc/ui/training/training_screen_wm.dart';
 import 'package:mind_calc/ui/training_list/training_list_screen_wm.dart';
 import 'package:mwwm/mwwm.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:surf_mwwm/surf_mwwm.dart';
 import 'package:mind_calc/ui/training_list/di/training_list_screen_component.dart';
 
@@ -60,19 +59,22 @@ class _TrainingListScreenState
               title: loc.main.qualityTitle,
               description: loc.main.qualityDescription,
               color: ProjectColors.warmBlue,
-              iconPath: Assets.quality),
+              iconPath: Assets.quality,
+              type: TrainingType.QUALITY),
           SizedBox(height: 12),
           _buildTrainingTypeBtn(
               title: loc.main.speedTitle,
               description: loc.main.speedDescription,
               color: ProjectColors.greenBlue,
-              iconPath: Assets.speed),
+              iconPath: Assets.speed,
+              type: TrainingType.SPEED),
           SizedBox(height: 12),
           _buildTrainingTypeBtn(
               title: loc.main.zenTitle,
               description: loc.main.zenDescription,
               color: ProjectColors.pinkishOrange,
-              iconPath: Assets.zen),
+              iconPath: Assets.zen,
+              type: TrainingType.ZEN),
           SizedBox(height: 24)
         ],
       ),
@@ -139,21 +141,12 @@ class _TrainingListScreenState
   }
 
   Widget _buildTrainingTypeBtn(
-      {String title, String description, Color color, String iconPath}) {
+      {String title, String description, Color color, String iconPath, TrainingType type}) {
     return SizedBox(
       height: 80,
       child: FlatButton(
-        onPressed: () async {
-          var prefs = await SharedPreferences.getInstance();
-          var calcProvider = CalculationProvider(prefs);
-          calcProvider.getCalculation(100, true, [
-            CalculationAction.PLUS,
-            CalculationAction.MINUS,
-            CalculationAction.MULTIPLY,
-            CalculationAction.DIVIDE,
-            CalculationAction.PERCENT,
-            CalculationAction.POW,
-          ]);
+        onPressed: () {
+          wm.navigateToTraining(type);
         },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
