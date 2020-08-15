@@ -8,45 +8,58 @@ const int QUALITY_TYPE_CALC_COUNT = 20;
 
 class TrainingSessionHandler {
   final TrainingType _trainingType;
-  Timer speedTypeTimer;
-  int timerTicksLeft = 60;
-  int completedCalculationsCount = 0;
+  Timer _speedTypeTimer;
+  int _timerTicksLeft = 60;
+  int _completedCalculationsCount = 0;
   final OnSessionInfoChanged onSessionInfoChanged;
 
   TrainingSessionHandler(this._trainingType, this.onSessionInfoChanged) {
     if (_trainingType == TrainingType.QUALITY) {
       onSessionInfoChanged(
-          "$completedCalculationsCount / $QUALITY_TYPE_CALC_COUNT");
+          "$_completedCalculationsCount / $QUALITY_TYPE_CALC_COUNT");
+    }
+    resumeTimer();
+  }
+
+  bool shouldFinishOnCalculationCompleted() {
+    if (_trainingType == TrainingType.QUALITY) {
+      if (_completedCalculationsCount >= QUALITY_TYPE_CALC_COUNT) {
+        return true;
+      } else {
+        _completedCalculationsCount++;
+        onSessionInfoChanged(
+            "$_completedCalculationsCount / $QUALITY_TYPE_CALC_COUNT");
+      }
     }
     if (_trainingType == TrainingType.SPEED) {
-      onSessionInfoChanged(timerTicksLeft.toString());
-      speedTypeTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-        if (timerTicksLeft > 0) {
-          timerTicksLeft--;
+      if (_timerTicksLeft == 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void resumeTimer() {
+    if (_trainingType == TrainingType.SPEED) {
+      if (_timerTicksLeft > 0) {
+        _timerTicksLeft--;
+      }
+      onSessionInfoChanged(_timerTicksLeft.toString());
+      _speedTypeTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+        if (_timerTicksLeft > 0) {
+          _timerTicksLeft--;
         }
-        onSessionInfoChanged(timerTicksLeft.toString());
-        if (timerTicksLeft == 0) {
+        onSessionInfoChanged(_timerTicksLeft.toString());
+        if (_timerTicksLeft == 0) {
           timer.cancel();
         }
       });
     }
   }
 
-  bool shouldFinishOnCalculationCompleted() {
-    if (_trainingType == TrainingType.QUALITY) {
-      if (completedCalculationsCount >= QUALITY_TYPE_CALC_COUNT) {
-        return true;
-      } else {
-        completedCalculationsCount++;
-      onSessionInfoChanged(
-          "$completedCalculationsCount / $QUALITY_TYPE_CALC_COUNT");
-      }
-    }
+  void pauseTimer() {
     if (_trainingType == TrainingType.SPEED) {
-      if (timerTicksLeft == 0) {
-        return true;
-      }
+      _speedTypeTimer.cancel();
     }
-    return false;
   }
 }

@@ -7,7 +7,8 @@ import '../training_screen_wm.dart';
 
 TrainingScreenWidgetModel createTrainingScreenWm(BuildContext context) {
   final component = Injector.of<TrainingScreenComponent>(context).component;
+  final navigator = component.navigator;
   final dependencies = WidgetModelDependencies();
 
-  return TrainingScreenWidgetModel(dependencies, component.type);
+  return TrainingScreenWidgetModel(dependencies, component.type, navigator);
 }

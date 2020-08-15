@@ -26,7 +26,7 @@ class TrainingScreen extends MwwmWidget<TrainingScreenComponent> {
 }
 
 class _TrainingScreenState extends WidgetState<TrainingScreenWidgetModel>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   Animation<double> animation;
   AnimationController controller;
   double widgetWidth;
@@ -42,42 +42,54 @@ class _TrainingScreenState extends WidgetState<TrainingScreenWidgetModel>
       setState(() {});
     });
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  Future<bool> didPopRoute() {
+    return super.didPopRoute();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: ProjectColors.iceBlue,
-      body: StreamedStateBuilder(
-        streamedState: wm.isScreenHasBeenStartedState,
-        builder: (context, isScreenHasBeenStarted) {
-          if (isScreenHasBeenStarted) {
-            return buildNormalState();
-          } else {
-            return TimeVariableWidget(
-              Duration(seconds: 3),
-              Duration(milliseconds: 16),
-              (timeLeft) {
-                return Center(
-                  child: Transform.scale(
-                    scale:
-                        5 + (timeLeft.inMilliseconds % 1000).toDouble() / 300,
-                    child: Text(
-                      (timeLeft.inSeconds + 1).toString(),
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontFamily: "Montserrat",
-                          color: ProjectColors.warmBlue),
+    return WillPopScope(
+      onWillPop: () async {
+        await wm.pauseClickedAction.accept();
+        return;
+      },
+      child: Scaffold(
+        backgroundColor: ProjectColors.iceBlue,
+        body: StreamedStateBuilder(
+          streamedState: wm.isScreenHasBeenStartedState,
+          builder: (context, isScreenHasBeenStarted) {
+            if (isScreenHasBeenStarted) {
+              return buildNormalState();
+            } else {
+              return TimeVariableWidget(
+                Duration(seconds: 3),
+                Duration(milliseconds: 16),
+                (timeLeft) {
+                  return Center(
+                    child: Transform.scale(
+                      scale:
+                          5 + (timeLeft.inMilliseconds % 1000).toDouble() / 300,
+                      child: Text(
+                        (timeLeft.inSeconds + 1).toString(),
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Montserrat",
+                            color: ProjectColors.warmBlue),
+                      ),
                     ),
-                  ),
-                );
-              },
-              onTimerCompleted: () {
-                wm.startTimerHasBeenExpiredAction.accept();
-              },
-            );
-          }
-        },
+                  );
+                },
+                onTimerCompleted: () {
+                  wm.startTimerHasBeenExpiredAction.accept();
+                },
+              );
+            }
+          },
+        ),
       ),
     );
   }
@@ -147,7 +159,9 @@ class _TrainingScreenState extends WidgetState<TrainingScreenWidgetModel>
                   borderRadius: BorderRadius.circular(24),
                 ),
                 color: ProjectColors.salmonPink,
-                onPressed: () {},
+                onPressed: () {
+                  wm.pauseClickedAction.accept();
+                },
                 child: SvgPicture.asset(
                   Assets.pause,
                   color: Colors.white,
@@ -378,6 +392,12 @@ class _TrainingScreenState extends WidgetState<TrainingScreenWidgetModel>
         SizedBox(height: 16),
       ],
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
   }
 }
 

@@ -14,6 +14,11 @@
     "speedTitle": "Speed",
     "speedDescription": "You have just a minute",
     "zenTitle": "Zen",
-    "zenDescription": "No limits. Enjoy!"
+    "zenDescription": "No limits. Enjoy!",
+    "pause": "Pause",
+    "finishTraining": "Finish training",
+    "areYouSureToEndTraining": "Are you sure, you want to end training?",
+    "yes": "Yes",
+    "no": "No"
   }
 }

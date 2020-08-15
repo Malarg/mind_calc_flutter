@@ -44,4 +44,9 @@ class Localemain {
   String get speedDescription => _data["speedDescription"];
   String get zenTitle => _data["zenTitle"];
   String get zenDescription => _data["zenDescription"];
+  String get pause => _data["pause"];
+  String get finishTraining => _data["finishTraining"];
+  String get areYouSureToEndTraining => _data["areYouSureToEndTraining"];
+  String get yes => _data["yes"];
+  String get no => _data["no"];
 }

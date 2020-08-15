@@ -1,7 +1,9 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart' show NavigatorState;
 import 'package:mind_calc/data/resources/prefs_values.dart';
 import 'package:mind_calc/domain/calculation/calculation_provider.dart';
+import 'package:mind_calc/ui/pause/pause_screen_route.dart';
 import 'package:mind_calc/ui/training/training_session_handler.dart';
 import 'package:mwwm/mwwm.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,6 +12,7 @@ import 'package:tuple/tuple.dart';
 
 ///Виджет экрана тренировки
 class TrainingScreenWidgetModel extends WidgetModel {
+  final NavigatorState _navigator;
   String _currentText = "";
   CalculationProvider _calculationProvider;
   TrainingType _type;
@@ -26,9 +29,10 @@ class TrainingScreenWidgetModel extends WidgetModel {
   final clearTextAction = Action<void>();
   final acceptTextAction = Action<void>();
   final startTimerHasBeenExpiredAction = Action<void>();
+  final pauseClickedAction = Action<void>();
 
   TrainingScreenWidgetModel(
-      WidgetModelDependencies baseDependencies, this._type)
+      WidgetModelDependencies baseDependencies, this._type, this._navigator)
       : super(baseDependencies);
 
   @override
@@ -66,6 +70,12 @@ class TrainingScreenWidgetModel extends WidgetModel {
         },
       );
       isScreenHasBeenStartedState.accept(true);
+    });
+    bind(pauseClickedAction, (event) {
+      trainingSessionHandler.pauseTimer();
+      _navigator.push(PauseScreenRoute()).then((value) {
+        trainingSessionHandler.resumeTimer();
+      });
     });
   }
 

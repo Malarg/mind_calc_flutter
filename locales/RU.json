@@ -12,6 +12,11 @@
     "speedTitle": "Скорость",
     "speedDescription": "У вас всего минута",
     "zenTitle": "Дзен",
-    "zenDescription": "Никаких ограничений. Наслаждайтесь!"
+    "zenDescription": "Никаких ограничений. Наслаждайтесь!",
+    "pause": "Пауза",
+    "finishTraining": "Завершить тренировку",
+    "areYouSureToEndTraining": "Вы уверены, что хотите закончить тренировку?",
+    "yes": "Да",
+    "no": "Нет"
   }
 }
