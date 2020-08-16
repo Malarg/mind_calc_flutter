@@ -7,14 +7,14 @@ typedef void OnSessionInfoChanged(String info);
 const int QUALITY_TYPE_CALC_COUNT = 20;
 
 class TrainingSessionHandler {
-  final TrainingType _trainingType;
+  final TrainingTypeEnum _trainingType;
   Timer _speedTypeTimer;
   int _timerTicksLeft = 60;
   int _completedCalculationsCount = 0;
   final OnSessionInfoChanged onSessionInfoChanged;
 
   TrainingSessionHandler(this._trainingType, this.onSessionInfoChanged) {
-    if (_trainingType == TrainingType.QUALITY) {
+    if (_trainingType == TrainingTypeEnum.QUALITY) {
       onSessionInfoChanged(
           "$_completedCalculationsCount / $QUALITY_TYPE_CALC_COUNT");
     }
@@ -22,7 +22,7 @@ class TrainingSessionHandler {
   }
 
   bool shouldFinishOnCalculationCompleted() {
-    if (_trainingType == TrainingType.QUALITY) {
+    if (_trainingType == TrainingTypeEnum.QUALITY) {
       if (_completedCalculationsCount >= QUALITY_TYPE_CALC_COUNT) {
         return true;
       } else {
@@ -31,7 +31,7 @@ class TrainingSessionHandler {
             "$_completedCalculationsCount / $QUALITY_TYPE_CALC_COUNT");
       }
     }
-    if (_trainingType == TrainingType.SPEED) {
+    if (_trainingType == TrainingTypeEnum.SPEED) {
       if (_timerTicksLeft == 0) {
         return true;
       }
@@ -40,7 +40,7 @@ class TrainingSessionHandler {
   }
 
   void resumeTimer() {
-    if (_trainingType == TrainingType.SPEED) {
+    if (_trainingType == TrainingTypeEnum.SPEED) {
       if (_timerTicksLeft > 0) {
         _timerTicksLeft--;
       }
@@ -58,7 +58,7 @@ class TrainingSessionHandler {
   }
 
   void pauseTimer() {
-    if (_trainingType == TrainingType.SPEED) {
+    if (_trainingType == TrainingTypeEnum.SPEED) {
       _speedTypeTimer.cancel();
     }
   }

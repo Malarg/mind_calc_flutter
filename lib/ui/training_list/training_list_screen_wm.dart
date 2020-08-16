@@ -11,7 +11,7 @@ class TrainingListScreenWidgetModel extends WidgetModel {
   TrainingListScreenWidgetModel(WidgetModelDependencies baseDependencies, this._navigator)
       : super(baseDependencies);
 
-  void navigateToTraining(TrainingType type) {
+  void navigateToTraining(TrainingTypeEnum type) {
     _navigator.push(TrainingScreenRoute(type));
   }
 }

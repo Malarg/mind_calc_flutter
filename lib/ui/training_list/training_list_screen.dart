@@ -60,21 +60,21 @@ class _TrainingListScreenState
               description: loc.main.qualityDescription,
               color: ProjectColors.warmBlue,
               iconPath: Assets.quality,
-              type: TrainingType.QUALITY),
+              type: TrainingTypeEnum.QUALITY),
           SizedBox(height: 12),
           _buildTrainingTypeBtn(
               title: loc.main.speedTitle,
               description: loc.main.speedDescription,
               color: ProjectColors.greenBlue,
               iconPath: Assets.speed,
-              type: TrainingType.SPEED),
+              type: TrainingTypeEnum.SPEED),
           SizedBox(height: 12),
           _buildTrainingTypeBtn(
               title: loc.main.zenTitle,
               description: loc.main.zenDescription,
               color: ProjectColors.pinkishOrange,
               iconPath: Assets.zen,
-              type: TrainingType.ZEN),
+              type: TrainingTypeEnum.ZEN),
           SizedBox(height: 24)
         ],
       ),
@@ -141,7 +141,7 @@ class _TrainingListScreenState
   }
 
   Widget _buildTrainingTypeBtn(
-      {String title, String description, Color color, String iconPath, TrainingType type}) {
+      {String title, String description, Color color, String iconPath, TrainingTypeEnum type}) {
     return SizedBox(
       height: 80,
       child: FlatButton(

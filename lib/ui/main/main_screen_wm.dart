@@ -1,3 +1,4 @@
+import 'package:mind_calc/data/db/db_provider.dart';
 import 'package:mwwm/mwwm.dart';
 import 'package:surf_util/surf_util.dart';
 import 'package:relation/relation.dart';
@@ -12,8 +13,9 @@ class MainScreenWidgetModel extends WidgetModel {
       : super(baseDependencies);
 
   @override
-  void onLoad() {
+  void onLoad() async {
     super.onLoad();
+    await DBProvider.db.database;
     _bindActions();
   }
 

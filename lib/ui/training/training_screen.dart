@@ -13,7 +13,7 @@ import 'di/training_screen_wm_builder.dart';
 
 class TrainingScreen extends MwwmWidget<TrainingScreenComponent> {
   TrainingScreen(
-    TrainingType type, {
+    TrainingTypeEnum type, {
     Key key,
     WidgetModelBuilder wmBuilder = createTrainingScreenWm,
   }) : super(

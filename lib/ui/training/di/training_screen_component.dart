@@ -6,10 +6,10 @@ import '../training_screen_wm.dart';
 /// Компонент экрана тренировки
 class TrainingScreenComponent implements Component {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final TrainingType type;
+  final TrainingTypeEnum type;
   NavigatorState navigator;
 
-  TrainingScreenComponent(BuildContext context, TrainingType type)
+  TrainingScreenComponent(BuildContext context, TrainingTypeEnum type)
       : this.type = type {
     navigator = Navigator.of(context);
   }
