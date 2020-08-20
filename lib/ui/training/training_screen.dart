@@ -53,8 +53,8 @@ class _TrainingScreenState extends WidgetState<TrainingScreenWidgetModel>
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        await wm.pauseClickedAction.accept();
+      onWillPop: () {
+        wm.pauseClickedAction.accept();
         return;
       },
       child: Scaffold(
@@ -116,7 +116,7 @@ class _TrainingScreenState extends WidgetState<TrainingScreenWidgetModel>
                   return StreamedStateBuilder(
                     streamedState: wm.currentTextState,
                     builder: (context, currText) {
-                      return _CalculationText(
+                      return CalculationText(
                         calc.item1,
                         currText ?? "",
                       );
@@ -468,55 +468,59 @@ class _GameTypeText extends StatelessWidget {
   }
 }
 
-class _CalculationText extends StatelessWidget {
+class CalculationText extends StatelessWidget {
   final String calculationText;
   final String resultValue;
-  _CalculationText(this.calculationText, this.resultValue);
+  final Color answerBackgroundColor;
+  CalculationText(this.calculationText, this.resultValue, {this.answerBackgroundColor = Colors.white});
 
   @override
   Widget build(BuildContext context) {
     TextStyle calcTextStyle = TextStyle(
-      fontSize: 32,
+      fontSize: 24,
       fontWeight: FontWeight.w600,
       fontFamily: "Montserrat",
       color: ProjectColors.duscTwo,
     );
     var calcTexts = calculationText.split("?");
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(
-          calcTexts[0],
-          style: calcTextStyle,
-        ),
-        _InputResult(resultValue),
-        Text(
-          calcTexts[1],
-          style: calcTextStyle,
-        ),
-      ],
+    return Container(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            calcTexts[0],
+            style: calcTextStyle,
+          ),
+          _InputResult(resultValue, backgroundColor: answerBackgroundColor),
+          Text(
+            calcTexts[1],
+            style: calcTextStyle,
+          ),
+        ],
+      ),
     );
   }
 }
 
 class _InputResult extends StatelessWidget {
   final String text;
-  _InputResult(this.text);
+  final Color backgroundColor;
+  _InputResult(this.text, {this.backgroundColor = Colors.white});
   @override
   Widget build(BuildContext context) {
     var textNullOrEmpty = text == null || text.isEmpty;
     return Container(
-      padding: EdgeInsets.fromLTRB(24, 16, 24, 16),
+      padding: EdgeInsets.fromLTRB(6, 0, 6, 0),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: backgroundColor,
         borderRadius: BorderRadius.all(
-          Radius.circular(32),
+          Radius.circular(12),
         ),
       ),
       child: Text(
         textNullOrEmpty ? "?" : text,
         style: TextStyle(
-          fontSize: 32,
+          fontSize: 24,
           fontWeight: FontWeight.w600,
           fontFamily: "Montserrat",
           color: textNullOrEmpty

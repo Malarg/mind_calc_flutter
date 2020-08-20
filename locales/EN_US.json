@@ -19,6 +19,8 @@
     "finishTraining": "Finish training",
     "areYouSureToEndTraining": "Are you sure, you want to end training?",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "trainingFinished": "Training finished",
+    "time": "Time"
   }
 }

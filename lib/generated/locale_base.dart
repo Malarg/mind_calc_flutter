@@ -49,4 +49,6 @@ class Localemain {
   String get areYouSureToEndTraining => _data["areYouSureToEndTraining"];
   String get yes => _data["yes"];
   String get no => _data["no"];
+  String get trainingFinished => _data["trainingFinished"];
+  String get time => _data["time"];
 }

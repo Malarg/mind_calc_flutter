@@ -23,13 +23,12 @@ class TrainingSessionHandler {
 
   bool shouldFinishOnCalculationCompleted() {
     if (_trainingType == TrainingTypeEnum.QUALITY) {
+      _completedCalculationsCount++;
+      onSessionInfoChanged(
+            "$_completedCalculationsCount / $QUALITY_TYPE_CALC_COUNT");
       if (_completedCalculationsCount >= QUALITY_TYPE_CALC_COUNT) {
         return true;
-      } else {
-        _completedCalculationsCount++;
-        onSessionInfoChanged(
-            "$_completedCalculationsCount / $QUALITY_TYPE_CALC_COUNT");
-      }
+      } 
     }
     if (_trainingType == TrainingTypeEnum.SPEED) {
       if (_timerTicksLeft == 0) {

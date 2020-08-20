@@ -8,6 +8,7 @@ import 'package:mind_calc/data/resources/prefs_values.dart';
 import 'package:mind_calc/domain/calculation/calculation_provider.dart';
 import 'package:mind_calc/ui/pause/pause_screen_route.dart';
 import 'package:mind_calc/ui/training/training_session_handler.dart';
+import 'package:mind_calc/ui/training_result/training_result_screen_route.dart';
 import 'package:mwwm/mwwm.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
@@ -70,7 +71,9 @@ class TrainingScreenWidgetModel extends WidgetModel {
         _clearText();
         _generateCalc();
       } else {
-        _finishTrainingInDb();
+        _finishTrainingInDb().then((value) {
+          _navigator.push(TrainingResultScreenRoute(value));
+        });
       }
     });
     bind(startTimerHasBeenExpiredAction, (event) {
@@ -136,9 +139,10 @@ class TrainingScreenWidgetModel extends WidgetModel {
     await DBProvider.db.insertCalculation(calculation);
   }
 
-  void _finishTrainingInDb() async {
+  Future<Training> _finishTrainingInDb() async {
     training.isFinished = true;
     await DBProvider.db.updateTraining(training);
+    return training;
   }
 
   void _generateCalc() {

@@ -11,4 +11,5 @@ class Assets {
   static const String check = "assets/check.svg";
   static const String close = "assets/close.svg";
   static const String pause = "assets/pause.svg";
+  static const String share = "assets/share.svg";
 }

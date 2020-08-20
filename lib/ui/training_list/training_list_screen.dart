@@ -32,51 +32,53 @@ class _TrainingListScreenState
   @override
   Widget build(BuildContext context) {
     final loc = Localizations.of<LocaleBase>(context, LocaleBase);
-    return Container(
-      margin: EdgeInsets.fromLTRB(16, 44, 16, 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          _buildCompetitionBlockButton(
-            Assets.dashboard,
-            loc.main.leaderboard,
-            () => {},
-          ),
-          SizedBox(height: 12),
-          _buildCompetitionBlockButton(
-            Assets.dashboard,
-            loc.main.achievements,
-            () => {},
-          ),
-          Expanded(
-            child: Container(),
-          ),
-          Container(child: GoodDayWidget(), alignment: Alignment.centerLeft),
-          SizedBox(height: 2),
-          _buildHappyTrainingText(),
-          SizedBox(height: 24),
-          _buildTrainingTypeBtn(
-              title: loc.main.qualityTitle,
-              description: loc.main.qualityDescription,
-              color: ProjectColors.warmBlue,
-              iconPath: Assets.quality,
-              type: TrainingTypeEnum.QUALITY),
-          SizedBox(height: 12),
-          _buildTrainingTypeBtn(
-              title: loc.main.speedTitle,
-              description: loc.main.speedDescription,
-              color: ProjectColors.greenBlue,
-              iconPath: Assets.speed,
-              type: TrainingTypeEnum.SPEED),
-          SizedBox(height: 12),
-          _buildTrainingTypeBtn(
-              title: loc.main.zenTitle,
-              description: loc.main.zenDescription,
-              color: ProjectColors.pinkishOrange,
-              iconPath: Assets.zen,
-              type: TrainingTypeEnum.ZEN),
-          SizedBox(height: 24)
-        ],
+    return Scaffold(
+      body: Container(
+        margin: EdgeInsets.fromLTRB(16, 44, 16, 0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            _buildCompetitionBlockButton(
+              Assets.dashboard,
+              loc.main.leaderboard,
+              () => {},
+            ),
+            SizedBox(height: 12),
+            _buildCompetitionBlockButton(
+              Assets.dashboard,
+              loc.main.achievements,
+              () => {},
+            ),
+            Expanded(
+              child: Container(),
+            ),
+            Container(child: GoodDayWidget(), alignment: Alignment.centerLeft),
+            SizedBox(height: 2),
+            _buildHappyTrainingText(),
+            SizedBox(height: 24),
+            _buildTrainingTypeBtn(
+                title: loc.main.qualityTitle,
+                description: loc.main.qualityDescription,
+                color: ProjectColors.warmBlue,
+                iconPath: Assets.quality,
+                type: TrainingTypeEnum.QUALITY),
+            SizedBox(height: 12),
+            _buildTrainingTypeBtn(
+                title: loc.main.speedTitle,
+                description: loc.main.speedDescription,
+                color: ProjectColors.greenBlue,
+                iconPath: Assets.speed,
+                type: TrainingTypeEnum.SPEED),
+            SizedBox(height: 12),
+            _buildTrainingTypeBtn(
+                title: loc.main.zenTitle,
+                description: loc.main.zenDescription,
+                color: ProjectColors.pinkishOrange,
+                iconPath: Assets.zen,
+                type: TrainingTypeEnum.ZEN),
+            SizedBox(height: 24)
+          ],
+        ),
       ),
     );
   }
@@ -141,7 +143,11 @@ class _TrainingListScreenState
   }
 
   Widget _buildTrainingTypeBtn(
-      {String title, String description, Color color, String iconPath, TrainingTypeEnum type}) {
+      {String title,
+      String description,
+      Color color,
+      String iconPath,
+      TrainingTypeEnum type}) {
     return SizedBox(
       height: 80,
       child: FlatButton(

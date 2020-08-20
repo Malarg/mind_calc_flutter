@@ -89,22 +89,23 @@ class DBProvider {
     return calculation;
   }
 
-  Future<Calculation> getCalculationsByTrainingId(int trainingId) async {
+  Future<List<Calculation>> getCalculationsByTrainingId(int trainingId) async {
     List<Map<String, dynamic>> maps = await _database.query(
       "Calculation",
       where: "trainingId = ?",
       whereArgs: [trainingId],
     );
-    var map = maps.first;
     var training = await getTrainingById(trainingId);
-    return Calculation(
-      id: map["id"],
-      training: training,
-      timestamp: DateTime.fromMillisecondsSinceEpoch(map["timestamp"]),
-      value: map["value"],
-      result: map["result"],
-      answer: map["answer"]
-    );
+    return List.generate(maps.length, (i) {
+      var map = maps[i];
+      return Calculation(
+          id: map["id"],
+          training: training,
+          timestamp: DateTime.fromMillisecondsSinceEpoch(map["timestamp"]),
+          value: map["value"],
+          result: map["result"],
+          answer: map["answer"]);
+    });
   }
 
   Future<Training> insertTraining(Training training) async {

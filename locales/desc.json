@@ -19,6 +19,8 @@
     "finishTraining": "",
     "areYouSureToEndTraining": "",
     "yes": "",
-    "no": ""
+    "no": "",
+    "trainingFinished": "",
+    "time": ""
   }
 }
