@@ -87,7 +87,7 @@ class TrainingScreenWidgetModel extends WidgetModel {
     });
     bind(pauseClickedAction, (event) {
       trainingSessionHandler.pauseTimer();
-      _navigator.push(PauseScreenRoute()).then((value) {
+      _navigator.push(PauseScreenRoute(training)).then((value) {
         trainingSessionHandler.resumeTimer();
       });
     });

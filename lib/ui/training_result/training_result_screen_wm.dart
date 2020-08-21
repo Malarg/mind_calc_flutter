@@ -4,10 +4,7 @@ import 'package:mind_calc/data/models/calculation.dart';
 import 'package:mind_calc/data/models/training.dart';
 import 'package:mind_calc/ui/training_list/training_list_screen_route.dart';
 import 'package:mwwm/mwwm.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:surf_mwwm/surf_mwwm.dart';
-import 'package:surf_util/surf_util.dart';
 import 'package:tuple/tuple.dart';
 
 class TrainingResultScreenWidgetModel extends WidgetModel {

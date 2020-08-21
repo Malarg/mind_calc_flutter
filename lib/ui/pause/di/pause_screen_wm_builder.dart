@@ -11,5 +11,10 @@ PauseScreenWidgetModel createPauseScreenWm(BuildContext context) {
   final dialogController = component.dialogController;
 
   return PauseScreenWidgetModel(
-      dependencies, navigator, dialogController, component.scaffoldKey);
+    dependencies,
+    navigator,
+    dialogController,
+    component.scaffoldKey,
+    component.training,
+  );
 }

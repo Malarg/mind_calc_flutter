@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mind_calc/data/models/training.dart';
 import 'package:mind_calc/data/resources/colors.dart';
 import 'package:mind_calc/generated/locale_base.dart';
 import 'package:mind_calc/ui/pause/di/pause_screen_wm_builder.dart';
@@ -9,11 +10,12 @@ import 'di/pause_screen_component.dart';
 
 class PauseScreen extends MwwmWidget<PauseScreenComponent> {
   PauseScreen(
+    Training training,
       {Key key,
       WidgetModelBuilder wmBuilder = createPauseScreenWm})
       : super(
             key: key,
-            dependenciesBuilder: (context) => PauseScreenComponent(context),
+            dependenciesBuilder: (context) => PauseScreenComponent(context, training),
             widgetStateBuilder: () => _PauseScreenState(),
             widgetModelBuilder: wmBuilder);
 }
