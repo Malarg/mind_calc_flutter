@@ -90,7 +90,9 @@ class _HistoryScreenState extends WidgetState<HistoryScreenWidgetModel> {
           padding: EdgeInsets.fromLTRB(12, 0, 12, 8),
           child: FlatButton(
             color: Colors.white,
-            onPressed: () {},
+            onPressed: () {
+              wm.trainingClickedAction.accept(training);
+            },
             padding: EdgeInsets.fromLTRB(36, 8, 12, 8),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(

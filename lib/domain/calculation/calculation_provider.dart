@@ -117,13 +117,9 @@ class CalculationProvider {
     var rand = Random();
     var randValue = rand.nextInt(100);
     int actionsCount = 1;
-    if (randValue > 20) actionsCount++;
-    if (randValue > 35) actionsCount++;
-    if (randValue > 50) actionsCount++;
-    if (randValue > 65) actionsCount++;
-    if (randValue > 75) actionsCount++;
-    if (randValue > 85) actionsCount++;
-    if (randValue > 95) actionsCount++;
+    if (randValue > 40) actionsCount++;
+    if (randValue > 70) actionsCount++;
+    if (randValue > 90) actionsCount++;
     return actionsCount;
   }
 

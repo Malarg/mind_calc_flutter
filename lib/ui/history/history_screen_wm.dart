@@ -1,5 +1,6 @@
 import 'package:mind_calc/data/db/db_provider.dart';
 import 'package:mind_calc/data/models/training.dart';
+import 'package:mind_calc/ui/calculations_history/calculations_history_screen_route.dart';
 import 'package:mwwm/mwwm.dart';
 import 'package:surf_mwwm/surf_mwwm.dart';
 import 'package:flutter/material.dart' hide Action;
@@ -13,6 +14,7 @@ class HistoryScreenWidgetModel extends WidgetModel {
   final StreamedState<List<Tuple2<Training, Tuple2<int, int>>>>
       calculationsState = StreamedState([]);
 
+  final Action<Training> trainingClickedAction = Action<Training>();
   HistoryScreenWidgetModel(
       WidgetModelDependencies baseDependencies, this._navigator)
       : super(baseDependencies);
@@ -42,5 +44,9 @@ class HistoryScreenWidgetModel extends WidgetModel {
   @override
   void onBind() {
     super.onBind();
+
+    bind(trainingClickedAction, (training) {
+      _navigator.push(CalculationsHistoryScreenRoute(training));
+    });
   }
 }
