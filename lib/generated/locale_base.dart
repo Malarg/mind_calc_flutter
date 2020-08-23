@@ -51,4 +51,19 @@ class Localemain {
   String get no => _data["no"];
   String get trainingFinished => _data["trainingFinished"];
   String get time => _data["time"];
+  String get history => _data["history"];
+  String get today => _data["today"];
+  String get yesterday => _data["yesterday"];
+  String get january => _data["january"];
+  String get february => _data["february"];
+  String get march => _data["march"];
+  String get april => _data["april"];
+  String get may => _data["may"];
+  String get june => _data["june"];
+  String get july => _data["july"];
+  String get august => _data["august"];
+  String get september => _data["september"];
+  String get october => _data["october"];
+  String get november => _data["november"];
+  String get december => _data["december"];
 }

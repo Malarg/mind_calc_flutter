@@ -1,7 +1,7 @@
 import 'package:mind_calc/data/models/training_type.dart';
 
 ///Тренировка
-class Training {
+class   Training {
   ///айдишник тренировки
   int id;
 

@@ -1,6 +1,7 @@
 import 'package:fluid_bottom_nav_bar/fluid_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mind_calc/ui/history/history_screen.dart';
 import 'package:mind_calc/ui/main/di/main_screen_component.dart';
 import 'package:mind_calc/ui/main/di/main_screen_wm_builder.dart';
 import 'package:mind_calc/ui/main/main_screen_wm.dart';
@@ -29,6 +30,7 @@ class _MainScreenState extends WidgetState<MainScreenWidgetModel> {
   static const BOTTOM_BAR_ANIMATION_SPEED_COEF = 0.2;
 
   var trainingListScreen = TrainingListScreen();
+  var historyScreen = HistoryScreen();
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +42,9 @@ class _MainScreenState extends WidgetState<MainScreenWidgetModel> {
           return Center(
             child: state == MainScreenTabType.TRAINING
                 ? trainingListScreen
-                : Text(state.value.toString()),
+                : state == MainScreenTabType.HISTORY
+                    ? historyScreen
+                    : Text(state.value.toString()),
           );
         },
       ),

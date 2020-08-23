@@ -8,16 +8,17 @@ import 'package:mwwm/mwwm.dart';
 import 'package:surf_mwwm/surf_mwwm.dart';
 import 'di/pause_screen_component.dart';
 
+///Экран паузы
 class PauseScreen extends MwwmWidget<PauseScreenComponent> {
-  PauseScreen(
-    Training training,
-      {Key key,
-      WidgetModelBuilder wmBuilder = createPauseScreenWm})
+  PauseScreen(Training training,
+      {Key key, WidgetModelBuilder wmBuilder = createPauseScreenWm})
       : super(
-            key: key,
-            dependenciesBuilder: (context) => PauseScreenComponent(context, training),
-            widgetStateBuilder: () => _PauseScreenState(),
-            widgetModelBuilder: wmBuilder);
+          key: key,
+          dependenciesBuilder: (context) =>
+              PauseScreenComponent(context, training),
+          widgetStateBuilder: () => _PauseScreenState(),
+          widgetModelBuilder: wmBuilder,
+        );
 }
 
 class _PauseScreenState extends WidgetState<PauseScreenWidgetModel> {

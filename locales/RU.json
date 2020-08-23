@@ -19,6 +19,21 @@
     "yes": "Да",
     "no": "Нет",
     "trainingFinished": "Тренировка завершена",
-    "time": "Время"
+    "time": "Время",
+    "history": "История",
+    "today": "Сегодня",
+    "yesterday": "Вчера",
+    "january": " Января",
+    "february": "Февраля",
+    "march": "Марта",
+    "april": "Апреля",
+    "may": "Мая",
+    "june": "Июня",
+    "july": "Июля",
+    "august": "Августа",
+    "september": "Сентября",
+    "october": "Октября",
+    "november": "Ноября",
+    "december": "Декабря"
   }
 }

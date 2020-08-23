@@ -171,73 +171,74 @@ class _TrainingResultScreenState
           ),
         ),
         child: SizedBox(
-            width: double.infinity,
-            height: 56,
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        "${loc.main.time}: $duration",
-                        style: TextStyle(
-                          color: ProjectColors.coolGrey,
-                          fontSize: 12,
-                          fontFamily: "Montserrat",
-                          fontWeight: FontWeight.w200,
-                        ),
+          width: double.infinity,
+          height: 56,
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "${loc.main.time}: $duration",
+                      style: TextStyle(
+                        color: ProjectColors.coolGrey,
+                        fontSize: 12,
+                        fontFamily: "Montserrat",
+                        fontWeight: FontWeight.w200,
                       ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
-                        child: Expanded(
-                          child: FittedBox(
-                            child: CalculationText(
-                              calculation.value,
-                              calculation.answer,
-                              answerBackgroundColor: ProjectColors.iceBlue,
-                            ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
+                      child: Expanded(
+                        child: FittedBox(
+                          child: CalculationText(
+                            calculation.value,
+                            calculation.answer,
+                            answerBackgroundColor: ProjectColors.iceBlue,
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                SizedBox(width: 24),
-                calculation.answer == calculation.result
-                    ? Container(
-                        padding: EdgeInsets.all(2),
-                        decoration: BoxDecoration(
-                          color: ProjectColors.ice,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(24),
-                          ),
+              ),
+              SizedBox(width: 24),
+              calculation.answer == calculation.result
+                  ? Container(
+                      padding: EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        color: ProjectColors.ice,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(24),
                         ),
-                        child: Icon(
-                          Icons.check,
-                          color: ProjectColors.tealishGreen,
+                      ),
+                      child: Icon(
+                        Icons.check,
+                        color: ProjectColors.tealishGreen,
+                      ),
+                    )
+                  : Container(
+                      padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
+                      decoration: BoxDecoration(
+                        color: ProjectColors.lightPink,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(24),
                         ),
-                      )
-                    : Container(
-                        padding: EdgeInsets.fromLTRB(8, 4, 8, 4),
-                        decoration: BoxDecoration(
-                          color: ProjectColors.lightPink,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(24),
-                          ),
+                      ),
+                      child: Text(
+                        calculation.result,
+                        style: TextStyle(
+                          color: ProjectColors.neonRed,
+                          fontSize: 16,
+                          fontFamily: "Montserrat",
+                          fontWeight: FontWeight.w300,
                         ),
-                        child: Text(
-                          calculation.result,
-                          style: TextStyle(
-                            color: ProjectColors.neonRed,
-                            fontSize: 16,
-                            fontFamily: "Montserrat",
-                            fontWeight: FontWeight.w300,
-                          ),
-                        ),
-                      )
-              ],
-            )),
+                      ),
+                    ),
+            ],
+          ),
+        ),
       ),
     );
   }

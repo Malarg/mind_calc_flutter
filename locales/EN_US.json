@@ -21,6 +21,21 @@
     "yes": "Yes",
     "no": "No",
     "trainingFinished": "Training finished",
-    "time": "Time"
+    "time": "Time",
+    "history": "History",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "january": "January",
+    "february": "february",
+    "march": "March",
+    "april": "April",
+    "may": "May",
+    "june": "June",
+    "july": "July",
+    "august": "August",
+    "september": "September",
+    "october": "October",
+    "november": "November",
+    "december": "December"
   }
 }

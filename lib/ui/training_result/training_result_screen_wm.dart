@@ -2,11 +2,13 @@ import 'package:flutter/material.dart' show NavigatorState;
 import 'package:mind_calc/data/db/db_provider.dart';
 import 'package:mind_calc/data/models/calculation.dart';
 import 'package:mind_calc/data/models/training.dart';
+import 'package:mind_calc/ui/main/main_screen_route.dart';
 import 'package:mind_calc/ui/training_list/training_list_screen_route.dart';
 import 'package:mwwm/mwwm.dart';
 import 'package:surf_mwwm/surf_mwwm.dart';
 import 'package:tuple/tuple.dart';
 
+///Виджет модель экрана истории
 class TrainingResultScreenWidgetModel extends WidgetModel {
   final Training _training;
   final NavigatorState _navigator;
@@ -43,7 +45,7 @@ class TrainingResultScreenWidgetModel extends WidgetModel {
     super.onBind();
     bind(continueAction, (t) {
       _navigator.pushAndRemoveUntil(
-        TrainingListScreenRoute(),
+        MainScreenRoute(),
         (route) => false,
       );
     });
