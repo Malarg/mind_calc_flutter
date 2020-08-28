@@ -29,7 +29,6 @@ class _AppState extends WidgetState<AppWidgetModel> {
   @override
   void initState() {
     _navigatorKey = Injector.of<AppComponent>(context).component.navigatorKey;
-    _initPrefs();
     super.initState();
   }
 
@@ -39,22 +38,5 @@ class _AppState extends WidgetState<AppWidgetModel> {
         navigatorKey: _navigatorKey,
         localizationsDelegates: [const LocDelegate()],
         home: MainScreen());
-  }
-
-  void _initPrefs() {
-    SharedPreferences.getInstance().then((prefs) {
-      void _initIntPref(String prefName) {
-        if (prefs.getInt(prefName) == null) {
-          prefs.setInt(prefName, 0);
-        }
-      }
-
-      _initIntPref(PrefsValues.calcPlusCount);
-      _initIntPref(PrefsValues.calcMinusCount);
-      _initIntPref(PrefsValues.calcMultiplyCount);
-      _initIntPref(PrefsValues.calcDivideCount);
-      _initIntPref(PrefsValues.calcPowCount);
-      _initIntPref(PrefsValues.calcPercentCount);
-    });
   }
 }

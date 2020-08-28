@@ -15,4 +15,6 @@ class ProjectColors {
   static const Color ice = Color(0xffedfff6);
   static const Color lightPink = Color(0xffffedee);
   static const Color neonRed = Color(0xffff0e47);
+  static const Color darkSkyBlue = Color(0xff4666ed);
+  static const Color paleGrey28 = Color(0x88dfe4ec);
 }

@@ -85,6 +85,9 @@ class _TrainingResultScreenState
               StreamedStateBuilder(
                 streamedState: wm.calculationsState,
                 builder: (_, obj) {
+                  if (obj == null) {
+                    return Container();
+                  }
                   var training = obj.item1 as Training;
                   var calcs = obj.item2 as List<Calculation>;
                   return Column(

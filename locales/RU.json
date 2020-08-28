@@ -34,6 +34,17 @@
     "september": "Сентября",
     "october": "Октября",
     "november": "Ноября",
-    "december": "Декабря"
+    "december": "Декабря",
+    "settings": "Настройки",
+    "language": "Язык",
+    "russian": "Русский",
+    "change": "Сменить",
+    "complexityLevel": "Уровень сложности",
+    "notifications": "Уведомления",
+    "remindTraining": "Напомнить в",
+    "allowedOperations": "Допустимые операции",
+    "getProVersion": "Приобрести Pro-версию",
+    "shareFriends": "Рассказать друзьям",
+    "equalityMode": "Режим уравнения"
   }
 }

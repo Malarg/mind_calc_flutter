@@ -66,4 +66,15 @@ class Localemain {
   String get october => _data["october"];
   String get november => _data["november"];
   String get december => _data["december"];
+  String get settings => _data["settings"];
+  String get language => _data["language"];
+  String get russian => _data["russian"];
+  String get change => _data["change"];
+  String get complexityLevel => _data["complexityLevel"];
+  String get notifications => _data["notifications"];
+  String get remindTraining => _data["remindTraining"];
+  String get allowedOperations => _data["allowedOperations"];
+  String get getProVersion => _data["getProVersion"];
+  String get shareFriends => _data["shareFriends"];
+  String get equalityMode => _data["equalityMode"];
 }

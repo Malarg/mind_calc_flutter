@@ -12,8 +12,8 @@ class CalculationProvider {
   CalculationProvider(this.preferences);
 
   /// Возвращает пару значений, где первое - пример, второе - значение на месте "?"
-  Tuple2<String, int> getCalculation(int level, bool isEquationEnabled,
-      List<CalculationAction> acceedOperations) {
+  Tuple2<String, int> getCalculation(int level) {
+    var isEquationEnabled = preferences.getBool(PrefsValues.isEqualityModeEnabled);
     print("Алгоритм генерации примеров начал работу.");
 
     var calcItemCount = _getCalcItemsCount();
@@ -53,7 +53,7 @@ class CalculationProvider {
       });
 
       var allowedOperations = _getAllowedOperationsForNumbers(
-          resultString, numbersPositions, allowedRanges, acceedOperations);
+          resultString, numbersPositions, allowedRanges);
       print("Определены допустимые операции для каждого числа в строке:");
       allowedOperations.forEach((pos, operations) {
         var mergedOperations = operations.map((e) => e.value).join(" ");
@@ -63,7 +63,7 @@ class CalculationProvider {
 
       if (allowedOperations.isEmpty) {
         print("Допустимые операции не найдены. Возврат к началу алгоритма");
-        return getCalculation(level, isEquationEnabled, acceedOperations);
+        return getCalculation(level);
       }
 
       var nextOperation = _getNextOperation(allowedOperations, resultString);
@@ -184,15 +184,14 @@ class CalculationProvider {
       _getAllowedOperationsForNumbers(
     String inputString,
     List<Tuple2<int, int>> numbersPositions,
-    _OperationRangeValues ranges,
-    List<CalculationAction> acceedOperations,
+    _OperationRangeValues ranges
   ) {
     Map<Tuple2<int, int>, List<CalculationAction>> result = {};
     numbersPositions.forEach((numberString) {
       var number = int.parse(
           inputString.substring(numberString.item1, numberString.item2));
       var allowedOperations =
-          _buildAllowedOperations(number, ranges).intersect(acceedOperations);
+          _buildAllowedOperations(number, ranges);
       if (allowedOperations.isNotEmpty) {
         result[numberString] = allowedOperations;
       }
@@ -209,16 +208,16 @@ class CalculationProvider {
     if (_canSplitWithMinus(number, ranges.minusRange)) {
       allowedOperations.add(CalculationAction.MINUS);
     }
-    if (_canSplitWithMultiply(number, ranges.multiplyRange)) {
+    if (_canSplitWithMultiply(number, ranges.multiplyRange) && preferences.getBool(PrefsValues.isMultiplyEnabled)) {
       allowedOperations.add(CalculationAction.MULTIPLY);
     }
-    if (_canSplitWithDivide(number, ranges.divideRange)) {
+    if (_canSplitWithDivide(number, ranges.divideRange) && preferences.getBool(PrefsValues.isDivideEnabled)) {
       allowedOperations.add(CalculationAction.DIVIDE);
     }
-    if (_canSplitWithPow(number, ranges.powRange)) {
+    if (_canSplitWithPow(number, ranges.powRange) && preferences.getBool(PrefsValues.isPowEnabled)) {
       allowedOperations.add(CalculationAction.POW);
     }
-    if (_canSplitWithPercent(number, ranges.percentRange)) {
+    if (_canSplitWithPercent(number, ranges.percentRange) && preferences.getBool(PrefsValues.isPercentEnabled)) {
       allowedOperations.add(CalculationAction.PERCENT);
     }
     return allowedOperations;

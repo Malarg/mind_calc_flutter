@@ -13,4 +13,5 @@ class Assets {
   static const String close = "assets/close.svg";
   static const String pause = "assets/pause.svg";
   static const String share = "assets/share.svg";
+  static const String key = "assets/kay.svg";
 }

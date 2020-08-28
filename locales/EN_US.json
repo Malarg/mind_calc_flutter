@@ -36,6 +36,17 @@
     "september": "September",
     "october": "October",
     "november": "November",
-    "december": "December"
+    "december": "December",
+    "settings": "Settings",
+    "language": "Language",
+    "russian": "Russian",
+    "change": "Change",
+    "complexityLevel": "Complexity level",
+    "notifications": "Notifications",
+    "remindTraining": "Remind at",
+    "allowedOperations": "Allowed operations",
+    "getProVersion": "Get Pro-version",
+    "shareFriends": "Share friends",
+    "equalityMode": "Equality mode"
   }
 }

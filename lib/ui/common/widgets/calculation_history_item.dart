@@ -32,34 +32,32 @@ class CalculationHistoryItem extends StatelessWidget {
           child: Row(
             children: <Widget>[
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      "${loc.main.time}: $duration",
-                      style: TextStyle(
-                        color: ProjectColors.coolGrey,
-                        fontSize: 12,
-                        fontFamily: "Montserrat",
-                        fontWeight: FontWeight.w200,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(0, 4, 0, 4),
-                      child: Expanded(
-                        child: FittedBox(
-                          child: CalculationText(
-                            calculation.value,
-                            calculation.answer,
-                            answerBackgroundColor: ProjectColors.iceBlue,
-                          ),
+                              child: Container(
+                  padding: EdgeInsets.fromLTRB(0, 0, 24, 0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "${loc.main.time}: $duration",
+                        style: TextStyle(
+                          color: ProjectColors.coolGrey,
+                          fontSize: 12,
+                          fontFamily: "Montserrat",
+                          fontWeight: FontWeight.w200,
                         ),
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 2,),
+                      FittedBox(
+                        child: CalculationText(
+                          calculation.value,
+                          calculation.answer,
+                          answerBackgroundColor: ProjectColors.iceBlue,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              SizedBox(width: 24),
               calculation.answer == calculation.result
                   ? Container(
                       padding: EdgeInsets.all(2),

@@ -5,6 +5,7 @@ import 'package:mind_calc/ui/history/history_screen.dart';
 import 'package:mind_calc/ui/main/di/main_screen_component.dart';
 import 'package:mind_calc/ui/main/di/main_screen_wm_builder.dart';
 import 'package:mind_calc/ui/main/main_screen_wm.dart';
+import 'package:mind_calc/ui/settings/settings_screen.dart';
 import 'package:mind_calc/ui/training/training_screen.dart';
 import 'package:mind_calc/ui/training_list/training_list_screen.dart';
 import 'package:mwwm/mwwm.dart';
@@ -31,6 +32,7 @@ class _MainScreenState extends WidgetState<MainScreenWidgetModel> {
 
   var trainingListScreen = TrainingListScreen();
   var historyScreen = HistoryScreen();
+  var settingsScreen = SettingsScreen();
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +46,9 @@ class _MainScreenState extends WidgetState<MainScreenWidgetModel> {
                 ? trainingListScreen
                 : state == MainScreenTabType.HISTORY
                     ? historyScreen
-                    : Text(state.value.toString()),
+                    : state == MainScreenTabType.SETTINGS
+                        ? settingsScreen
+                        : Text(state.value.toString()),
           );
         },
       ),

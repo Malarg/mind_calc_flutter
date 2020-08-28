@@ -33,6 +33,7 @@ class _TrainingListScreenState
   Widget build(BuildContext context) {
     final loc = Localizations.of<LocaleBase>(context, LocaleBase);
     return Scaffold(
+      backgroundColor: ProjectColors.iceBlue,
       body: Container(
         margin: EdgeInsets.fromLTRB(16, 44, 16, 0),
         child: Column(

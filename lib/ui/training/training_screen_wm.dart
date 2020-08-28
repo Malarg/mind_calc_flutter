@@ -147,14 +147,7 @@ class TrainingScreenWidgetModel extends WidgetModel {
 
   void _generateCalc() {
     var calc = _calculationProvider
-        .getCalculation(prefs.getInt(PrefsValues.complexity), true, [
-      CalculationAction.PLUS,
-      CalculationAction.MINUS,
-      CalculationAction.MULTIPLY,
-      CalculationAction.DIVIDE,
-      CalculationAction.PERCENT,
-      CalculationAction.POW,
-    ]);
+        .getCalculation(prefs.getInt(PrefsValues.complexity));
     calculationState.accept(calc);
   }
 
