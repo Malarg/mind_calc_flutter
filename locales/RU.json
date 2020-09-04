@@ -45,6 +45,8 @@
     "allowedOperations": "Допустимые операции",
     "getProVersion": "Приобрести Pro-версию",
     "shareFriends": "Рассказать друзьям",
-    "equalityMode": "Режим уравнения"
+    "equalityMode": "Режим уравнения",
+    "selectLanguage": "Выберите язык",
+    "english": "English"
   }
 }

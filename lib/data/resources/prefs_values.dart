@@ -13,4 +13,6 @@ class PrefsValues {
   static const isPercentEnabled = "is_percent_enabled";
 
   static const isEqualityModeEnabled = "is_equality_mode_enabled";
+
+  static const languageId = "language_id";
 }

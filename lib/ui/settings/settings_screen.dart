@@ -4,6 +4,7 @@ import 'package:injector/injector.dart';
 import 'package:mind_calc/data/resources/colors.dart';
 import 'package:mind_calc/generated/locale_base.dart';
 import 'package:mind_calc/ui/common/widgets/rounded_rectange_background.dart';
+import 'package:mind_calc/ui/select_language/select_language_screen_wm.dart';
 import 'package:mind_calc/ui/settings/settings_screen_wm.dart';
 import 'package:surf_mwwm/surf_mwwm.dart';
 import 'package:mwwm/mwwm.dart';
@@ -32,59 +33,70 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
   @override
   Widget build(BuildContext context) {
     final loc = Localizations.of<LocaleBase>(context, LocaleBase);
-    return Scaffold(
-      appBar: AppBar(
-        title: Center(
-          child: Text(
-            loc.main.settings,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: ProjectColors.dusc,
-              fontSize: 20,
-              fontFamily: "Montserrat",
-              fontWeight: FontWeight.w700,
+    return StreamedStateBuilder(
+        streamedState: wm.languageState,
+        builder: (c, langId) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Center(
+                child: Text(
+                  loc.main.settings,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: ProjectColors.dusc,
+                    fontSize: 20,
+                    fontFamily: "Montserrat",
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+              backgroundColor: ProjectColors.iceBlue,
             ),
-          ),
-        ),
-        backgroundColor: ProjectColors.iceBlue,
-      ),
-      backgroundColor: ProjectColors.iceBlue,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              _buildLanguageItem(),
-              SizedBox(height: 12),
-              _buildComplexityItem(),
-              SizedBox(height: 12),
-              _buildEqualityModeItem(),
-              SizedBox(height: 16),
-              _buildNotificationsItem(),
-              SizedBox(height: 12),
-              _buildNotificationsTimeItem(),
-              SizedBox(height: 16),
-              _buildAllowedOperationsItem(),
-              SizedBox(height: 12),
-              _buildBuyProItem(),
-              SizedBox(height: 12),
-              _buildShareItem()
-            ],
-          ),
-        ),
-      ),
-    );
+            backgroundColor: ProjectColors.iceBlue,
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    _buildLanguageItem(langId),
+                    SizedBox(height: 12),
+                    _buildComplexityItem(),
+                    SizedBox(height: 12),
+                    _buildEqualityModeItem(),
+                    SizedBox(height: 12),
+                    _buildNotificationsItem(),
+                    SizedBox(height: 12),
+                    _buildAllowedOperationsItem(),
+                    SizedBox(height: 12),
+                    _buildBuyProItem(),
+                    SizedBox(height: 12),
+                    _buildShareItem()
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 
-  Widget _buildLanguageItem() {
+  Widget _buildLanguageItem(int langId) {
     final loc = Localizations.of<LocaleBase>(context, LocaleBase);
+    var langString = "";
+    switch (langId) {
+      case ENGLISH_ID: {
+        langString = loc.main.english;
+      } break;
+      case RUSSIAN_ID: {
+        langString = loc.main.russian;
+      }
+    }
     return RoundedRectangeBackground(
       child: Row(
         children: <Widget>[
           Text(
-            "${loc.main.language}: ${loc.main.russian}",
+            "${loc.main.language}: $langString",
             style: TextStyle(
               color: ProjectColors.duscTwo,
               fontSize: 16,
@@ -99,7 +111,9 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
             height: 36,
             width: 48,
             child: FlatButton(
-              onPressed: () {},
+              onPressed: () {
+                wm.changeLanguageAction.accept();
+              },
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
               color: ProjectColors.warmBlue,
               shape: RoundedRectangleBorder(
@@ -297,57 +311,95 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
     final loc = Localizations.of<LocaleBase>(context, LocaleBase);
     return RoundedRectangeBackground(
       padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
-      child: Row(
+      child: Column(
         children: <Widget>[
-          Text(
-            "${loc.main.notifications}",
-            style: TextStyle(
-              color: ProjectColors.duscTwo,
-              fontSize: 16,
-              fontFamily: "Montserrat",
-              fontWeight: FontWeight.w700,
-            ),
+          Row(
+            children: <Widget>[
+              Text(
+                "${loc.main.notifications}",
+                style: TextStyle(
+                  color: ProjectColors.duscTwo,
+                  fontSize: 16,
+                  fontFamily: "Montserrat",
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              Expanded(
+                child: Container(),
+              ),
+              StreamedStateBuilder(
+                streamedState: wm.isNotificationsEnabled,
+                builder: (_, isEnabled) {
+                  return Switch(
+                    value: isEnabled ?? false,
+                    onChanged: (bool value) {
+                      wm.notificationEnabledChangedAction.accept(value);
+                    },
+                    activeColor: ProjectColors.greenBlue,
+                    inactiveThumbColor: ProjectColors.iceBlue,
+                  );
+                },
+              ),
+            ],
           ),
-          Expanded(
-            child: Container(),
-          ),
-          Switch(
-            value: true,
-            onChanged: (bool value) {},
-            activeColor: ProjectColors.greenBlue,
-            inactiveThumbColor: ProjectColors.iceBlue,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildNotificationsTimeItem() {
-    final loc = Localizations.of<LocaleBase>(context, LocaleBase);
-    return RoundedRectangeBackground(
-      padding: const EdgeInsets.fromLTRB(32, 24, 40, 24),
-      child: Row(
-        children: <Widget>[
-          Text(
-            "${loc.main.remindTraining}",
-            style: TextStyle(
-              color: ProjectColors.duscTwo,
-              fontSize: 16,
-              fontFamily: "Montserrat",
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          Expanded(
-            child: Container(),
-          ),
-          Text(
-            "12:00",
-            style: TextStyle(
-              color: ProjectColors.darkSkyBlue,
-              fontSize: 16,
-              fontFamily: "Montserrat",
-              fontWeight: FontWeight.w600,
-            ),
+          StreamedStateBuilder(
+              streamedState: wm.isNotificationsEnabled,
+              builder: (_, isEnabled) {
+                return isEnabled ?? false ? SizedBox(height: 16) : Container();
+              }),
+          StreamedStateBuilder(
+            streamedState: wm.isNotificationsEnabled,
+            builder: (context, isEnabled) {
+              return isEnabled ?? false
+                  ? Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 12),
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            "${loc.main.remindTraining}",
+                            style: TextStyle(
+                              color: ProjectColors.duscTwo,
+                              fontSize: 16,
+                              fontFamily: "Montserrat",
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(),
+                          ),
+                          Text(
+                            "12:00",
+                            style: TextStyle(
+                              color: ProjectColors.darkSkyBlue,
+                              fontSize: 16,
+                              fontFamily: "Montserrat",
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          SizedBox(width: 12),
+                          SizedBox(
+                            height: 36,
+                            width: 48,
+                            child: FlatButton(
+                              onPressed: () {},
+                              padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                              color: ProjectColors.warmBlue,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
+                              ),
+                              child: Icon(
+                                Icons.mode_edit,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : Container();
+            },
           ),
         ],
       ),

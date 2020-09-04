@@ -77,4 +77,6 @@ class Localemain {
   String get getProVersion => _data["getProVersion"];
   String get shareFriends => _data["shareFriends"];
   String get equalityMode => _data["equalityMode"];
+  String get selectLanguage => _data["selectLanguage"];
+  String get english => _data["english"];
 }

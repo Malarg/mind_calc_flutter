@@ -47,6 +47,8 @@
     "allowedOperations": "",
     "getProVersion": "",
     "shareFriends": "",
-    "equalityMode": ""
+    "equalityMode": "",
+    "selectLanguage": "",
+    "english": ""
   }
 }

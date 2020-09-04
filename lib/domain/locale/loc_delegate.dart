@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mind_calc/data/resources/prefs_values.dart';
 import 'package:mind_calc/generated/locale_base.dart';
+import 'package:mind_calc/ui/select_language/select_language_screen_wm.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 ///Делегат для локализации
 class LocDelegate extends LocalizationsDelegate<LocaleBase> {
@@ -11,13 +14,36 @@ class LocDelegate extends LocalizationsDelegate<LocaleBase> {
 
   @override
   Future<LocaleBase> load(Locale locale) async {
-    var lang = 'ru';
-    if (isSupported(locale)) lang = locale.languageCode;
+    var prefs = await SharedPreferences.getInstance();
+    var langId = prefs.getInt(PrefsValues.languageId) ?? ENGLISH_ID;
+    var langPath = getLocalizationPath(langId);
     final loc = LocaleBase();
-    await loc.load(idMap[lang]);
+    await loc.load(langPath);
     return loc;
   }
 
   @override
   bool shouldReload(LocDelegate old) => false;
+}
+
+String getLocalizationPath(int langId) {
+  var languagePath = ENGLISH_PATH;
+  switch (langId) {
+    case ENGLISH_ID:
+      {
+        languagePath = ENGLISH_PATH;
+      }
+      break;
+    case RUSSIAN_ID:
+      {
+        languagePath = RUSSIAN_PATH;
+      }
+      break;
+    default:
+      {
+        languagePath = ENGLISH_PATH;
+      }
+      break;
+  }
+  return languagePath;
 }

@@ -17,4 +17,5 @@ class ProjectColors {
   static const Color neonRed = Color(0xffff0e47);
   static const Color darkSkyBlue = Color(0xff4666ed);
   static const Color paleGrey28 = Color(0x88dfe4ec);
+  static const Color closeWhite = Color(0xfff8f8f8);
 }

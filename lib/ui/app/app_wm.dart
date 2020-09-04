@@ -17,9 +17,9 @@ class AppWidgetModel extends WidgetModel {
 
   void _initPrefs() {
     SharedPreferences.getInstance().then((prefs) {
-      void _initIntPref(String prefName) {
+      void _initIntPref(String prefName, {int value = 0}) {
         if (prefs.getInt(prefName) == null) {
-          prefs.setInt(prefName, 0);
+          prefs.setInt(prefName, value);
         }
       }
 
@@ -43,6 +43,8 @@ class AppWidgetModel extends WidgetModel {
       _initBoolPref(PrefsValues.isPercentEnabled, false);
 
       _initBoolPref(PrefsValues.isEqualityModeEnabled, false);
+
+      _initIntPref(PrefsValues.languageId, value: 1);
     });
   }
 }

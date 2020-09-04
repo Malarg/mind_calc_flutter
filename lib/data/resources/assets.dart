@@ -14,4 +14,6 @@ class Assets {
   static const String pause = "assets/pause.svg";
   static const String share = "assets/share.svg";
   static const String key = "assets/kay.svg";
+  static const String flag_russian = "assets/flag_russian.png";
+  static const String flag_english = "assets/flag_english.png";
 }

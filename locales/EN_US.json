@@ -39,7 +39,7 @@
     "december": "December",
     "settings": "Settings",
     "language": "Language",
-    "russian": "Russian",
+    "russian": "Русский",
     "change": "Change",
     "complexityLevel": "Complexity level",
     "notifications": "Notifications",
@@ -47,6 +47,8 @@
     "allowedOperations": "Allowed operations",
     "getProVersion": "Get Pro-version",
     "shareFriends": "Share friends",
-    "equalityMode": "Equality mode"
+    "equalityMode": "Equality mode",
+    "selectLanguage": "Select language",
+    "english": "English"
   }
 }

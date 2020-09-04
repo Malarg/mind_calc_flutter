@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart' hide Action;
+import 'package:mind_calc/ui/select_language/select_language_route.dart';
 import 'package:mwwm/mwwm.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mind_calc/ui/select_language/select_language_screen_wm.dart';
 import 'package:surf_mwwm/surf_mwwm.dart';
 import '../../data/resources/prefs_values.dart';
 
@@ -8,6 +10,9 @@ import '../../data/resources/prefs_values.dart';
 class SettingsWidgetModel extends WidgetModel {
   final NavigatorState _navigator;
   SharedPreferences prefs;
+
+  final Action<void> changeLanguageAction = Action();
+  final StreamedState<int> languageState = StreamedState();
 
   final StreamedState<int> complexityState = StreamedState(0);
   final StreamedState<bool> isComplexityEditModeState = StreamedState(false);
@@ -31,6 +36,9 @@ class SettingsWidgetModel extends WidgetModel {
   final StreamedState<bool> isEqualityModeEnabledState = StreamedState();
   final Action<bool> equalityModeChangedAction = Action();
 
+  final StreamedState<bool> isNotificationsEnabled = StreamedState();
+  final Action<bool> notificationEnabledChangedAction = Action();
+
   SettingsWidgetModel(
     WidgetModelDependencies dependencies,
     this._navigator,
@@ -40,6 +48,9 @@ class SettingsWidgetModel extends WidgetModel {
   void onLoad() async {
     super.onLoad();
     prefs = await SharedPreferences.getInstance();
+
+    languageState.accept(prefs.getInt(PrefsValues.languageId) ?? ENGLISH_ID);
+
     int currentComplexity = prefs.getInt(PrefsValues.complexity);
     complexityState.accept(currentComplexity);
     complexityTextFieldState.accept(currentComplexity.toString());
@@ -55,6 +66,12 @@ class SettingsWidgetModel extends WidgetModel {
   @override
   void onBind() {
     super.onBind();
+    bind(changeLanguageAction, (_) { 
+      _navigator.push(SelectLanguageRoute()).then((_) {
+        var langId = prefs.getInt(PrefsValues.languageId);
+        languageState.accept(langId);
+      });
+    });
     bind(showComplexityEditModeAction, (_) {
       isComplexityEditModeState.accept(true);
     });
@@ -69,6 +86,9 @@ class SettingsWidgetModel extends WidgetModel {
         complexityState.accept(newComplexity);
         prefs.setInt(PrefsValues.complexity, newComplexity);
       }
+    });
+    bind(notificationEnabledChangedAction, (value) {
+      isNotificationsEnabled.accept(value);
     });
     bind(equalityModeChangedAction, (value) {
       isEqualityModeEnabledState.accept(value);
