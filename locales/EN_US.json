@@ -49,6 +49,8 @@
     "shareFriends": "Share friends",
     "equalityMode": "Equality mode",
     "selectLanguage": "Select language",
-    "english": "English"
+    "english": "English",
+    "levelInscreaseInfoMessage": "You increase your level from s1 to s2.  Keep going!",
+    "levelDecreaseInfoMessage": "Your level has dropped from s1 to s2. Don't give up!"
   }
 }

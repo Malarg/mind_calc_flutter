@@ -11,6 +11,7 @@ import 'package:mind_calc/ui/training_result/di/training_result_screen_wm_builde
 import 'package:mind_calc/ui/training_result/training_result_screen_wm.dart';
 import 'package:mwwm/mwwm.dart';
 import 'package:surf_mwwm/surf_mwwm.dart';
+import 'package:tuple/tuple.dart';
 import 'di/training_result_screen_component.dart';
 
 class TrainingResultScreen extends MwwmWidget<TrainingResultScreenComponent> {
@@ -51,7 +52,38 @@ class _TrainingResultScreenState
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              SizedBox(height: 40),
+              SizedBox(height: 8),
+              StreamedStateBuilder(
+                streamedState: wm.levelsInfoState,
+                builder: (_, levelInfo) {
+                  if (levelInfo == null) {
+                    return Container();
+                  }
+                  var startLevel = levelInfo.item1 as int;
+                  var endLevel = levelInfo.item2 as int;
+                  String text;
+                  if (startLevel < endLevel) {
+                    text = loc.main.levelInscreaseInfoMessage;
+                  } else {
+                    text = loc.main.levelDecreaseInfoMessage;
+                  }
+                  text = text
+                      .replaceFirst("s1", startLevel.toString())
+                      .replaceFirst("s2", endLevel.toString());
+                  return startLevel == endLevel
+                      ? Container()
+                      : Text(
+                          text,
+                          style: TextStyle(
+                            color: ProjectColors.dusc,
+                            fontSize: 14,
+                            fontFamily: "Montserrat",
+                            fontWeight: FontWeight.w500,
+                          ),
+                        );
+                },
+              ),
+              SizedBox(height: 32),
               Row(
                 children: <Widget>[
                   Expanded(

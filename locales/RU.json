@@ -47,6 +47,8 @@
     "shareFriends": "Рассказать друзьям",
     "equalityMode": "Режим уравнения",
     "selectLanguage": "Выберите язык",
-    "english": "English"
+    "english": "English",
+    "levelInscreaseInfoMessage": "Вы подняли ваш уровень с s1 до s2. Так держать!",
+    "levelDecreaseInfoMessage": "Ваш уровень опустился с s1 до s2.  Не сдавайтесь!"
   }
 }

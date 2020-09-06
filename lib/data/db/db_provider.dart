@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:mind_calc/data/models/calculation.dart';
+import 'package:mind_calc/data/models/complexity.dart';
 import 'package:mind_calc/data/models/training.dart';
 import 'package:mind_calc/data/models/training_type.dart';
 import 'package:mind_calc/ui/training/training_screen_wm.dart';
@@ -36,6 +37,7 @@ class DBProvider {
           "id INTEGER PRIMARY KEY,"
           "isFinished INTEGER,"
           "startTime INTEGER,"
+          "startComplexity INTEGER,"
           "duration INTEGER,"
           "typeId INTEGER"
           ")");
@@ -60,6 +62,9 @@ class DBProvider {
           "INSERT Into TrainingType (id,value)"
           "VALUES(?,?)",
           [3, "ZEN"]);
+      
+      var complexity =Complexity(null, 1, DateTime.now());
+      db.insert("Complexity", complexity.toMap());
     });
   }
 
@@ -145,17 +150,37 @@ class DBProvider {
     return _getTrainingByMap(map, trainingTypes);
   }
 
+  Future<Complexity> getLastComplexity() async {
+    var map = (await _database.rawQuery('''SELECT *
+        FROM Complexity
+        ORDER BY id DESC
+        LIMIT 1''')).first;
+    return Complexity(
+      map["id"],
+      map["value"],
+      DateTime.fromMillisecondsSinceEpoch(map["timestamp"]),
+    );
+  }
+
+  Future<Complexity> insertComplexity(Complexity complexity) async {
+    var id = await _database.insert("Complexity", complexity.toMap());
+    complexity.id = id;
+    return complexity;
+  }
+
   Training _getTrainingByMap(
       Map<String, dynamic> map, List<TrainingType> trainingTypes) {
     var trainingType = trainingTypes.firstWhere((e) => e.id == map["typeId"]);
     var isFinished = map["isfinished"] == 1;
     var startTime = DateTime.fromMillisecondsSinceEpoch(map["startTime"]);
+    var startComplexity = map["startComplexity"];
     var duration = Duration(milliseconds: map["duration"]);
     return Training(
       map["id"],
       trainingType,
       isFinished,
       startTime,
+      startComplexity,
       duration,
     );
   }

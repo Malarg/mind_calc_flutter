@@ -35,7 +35,8 @@ class AppWidgetModel extends WidgetModel {
       _initIntPref(PrefsValues.calcDivideCount);
       _initIntPref(PrefsValues.calcPowCount);
       _initIntPref(PrefsValues.calcPercentCount);
-      _initIntPref(PrefsValues.complexity);
+
+      _initIntPref(PrefsValues.complexity, value: 1);
 
       _initBoolPref(PrefsValues.isMultiplyEnabled, true);
       _initBoolPref(PrefsValues.isDivideEnabled, true);

@@ -49,6 +49,8 @@
     "shareFriends": "",
     "equalityMode": "",
     "selectLanguage": "",
-    "english": ""
+    "english": "",
+    "levelInscreaseInfoMessage": "",
+    "levelDecreaseInfoMessage": ""
   }
 }

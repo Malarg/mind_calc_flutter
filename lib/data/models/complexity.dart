@@ -10,6 +10,8 @@ class Complexity {
   ///Время, когда эта сложность была достигнута
   DateTime timestamp;
 
+  Complexity(this.id, this.value, this.timestamp);
+
   Map<String, dynamic> toMap() {
     return {
       "id" : id,

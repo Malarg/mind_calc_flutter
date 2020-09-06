@@ -79,4 +79,6 @@ class Localemain {
   String get equalityMode => _data["equalityMode"];
   String get selectLanguage => _data["selectLanguage"];
   String get english => _data["english"];
+  String get levelInscreaseInfoMessage => _data["levelInscreaseInfoMessage"];
+  String get levelDecreaseInfoMessage => _data["levelDecreaseInfoMessage"];
 }

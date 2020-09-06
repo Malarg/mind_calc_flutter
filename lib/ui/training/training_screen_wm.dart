@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart' show NavigatorState;
 import 'package:mind_calc/data/db/db_provider.dart';
 import 'package:mind_calc/data/models/calculation.dart';
+import 'package:mind_calc/data/models/complexity.dart';
 import 'package:mind_calc/data/models/training.dart';
 import 'package:mind_calc/data/resources/prefs_values.dart';
 import 'package:mind_calc/domain/calculation/calculation_provider.dart';
@@ -27,6 +28,7 @@ class TrainingScreenWidgetModel extends WidgetModel {
   int _correctAnswersChainLenght = 0;
   Training training;
   TrainingSessionHandler trainingSessionHandler;
+  DateTime _lastCalculationCompleted;
   final isScreenHasBeenStartedState = StreamedState<bool>(false);
   final currentTextState = StreamedState<String>();
   final isLastCalculationCorrectState = StreamedState<bool>();
@@ -95,8 +97,10 @@ class TrainingScreenWidgetModel extends WidgetModel {
 
   void _insertTraining() async {
     var typeDb = await DBProvider.db.getTrainingTypesByValue(_type.value);
-    training = await DBProvider.db.insertTraining(
-        Training(null, typeDb, false, DateTime.now(), Duration()));
+    var lastComplexity = await DBProvider.db.getLastComplexity();
+    _lastCalculationCompleted = DateTime.now();
+    training = await DBProvider.db.insertTraining(Training(
+        null, typeDb, false, DateTime.now(), lastComplexity.value, Duration()));
   }
 
   void _addText(String text) {
@@ -118,13 +122,25 @@ class TrainingScreenWidgetModel extends WidgetModel {
     if (isCalculationCorrect) {
       _correctAnswersChainLenght++;
       if (_correctAnswersChainLenght >= 3) {
-        prefs.setInt(PrefsValues.complexity, currentComplexity + 1);
+        var inSecondsTime = _lastCalculationCompleted
+            .difference(DateTime.now())
+            .inSeconds
+            .abs();
+        if (inSecondsTime <= 10) {
+          var newComplexity = currentComplexity + 1;
+          prefs.setInt(PrefsValues.complexity, newComplexity);
+          DBProvider.db.insertComplexity(
+              Complexity(null, newComplexity, DateTime.now()));
+        }
       }
     } else {
       _correctAnswersChainLenght = 0;
       var newComplexity = max(currentComplexity - 1, 1);
+      DBProvider.db
+          .insertComplexity(Complexity(null, newComplexity, DateTime.now()));
       prefs.setInt(PrefsValues.complexity, newComplexity);
     }
+    _lastCalculationCompleted = DateTime.now();
   }
 
   void _insertCalculationInDb() async {

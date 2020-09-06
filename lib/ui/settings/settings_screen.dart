@@ -6,6 +6,7 @@ import 'package:mind_calc/generated/locale_base.dart';
 import 'package:mind_calc/ui/common/widgets/rounded_rectange_background.dart';
 import 'package:mind_calc/ui/select_language/select_language_screen_wm.dart';
 import 'package:mind_calc/ui/settings/settings_screen_wm.dart';
+import 'package:share/share.dart';
 import 'package:surf_mwwm/surf_mwwm.dart';
 import 'package:mwwm/mwwm.dart';
 import 'di/settings_screen_component.dart';
@@ -66,10 +67,10 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
                     SizedBox(height: 12),
                     _buildEqualityModeItem(),
                     SizedBox(height: 12),
-                    _buildNotificationsItem(),
-                    SizedBox(height: 12),
+                    //_buildNotificationsItem(),
+                    //SizedBox(height: 12),
                     _buildAllowedOperationsItem(),
-                    SizedBox(height: 12),
+                    SizedBox(height: 24),
                     _buildBuyProItem(),
                     SizedBox(height: 12),
                     _buildShareItem()
@@ -292,8 +293,11 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
           StreamedStateBuilder(
             streamedState: wm.isEqualityModeEnabledState,
             builder: (_, isEnabled) {
+              if (isEnabled == null) {
+                return Container();
+              }
               return Switch(
-                value: isEnabled ?? false,
+                value: isEnabled,
                 onChanged: (bool value) {
                   wm.equalityModeChangedAction.accept(value);
                 },
@@ -590,7 +594,9 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
   Widget _buildShareItem() {
     final loc = Localizations.of<LocaleBase>(context, LocaleBase);
     return FlatButton(
-      onPressed: () {},
+      onPressed: () {
+        Share.share("text");
+      },
       padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
       color: ProjectColors.pinkishOrange,
       shape: RoundedRectangleBorder(
@@ -599,7 +605,7 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
         ),
       ),
       child: Text(
-        loc.main.getProVersion,
+        loc.main.shareFriends,
         style: TextStyle(
           color: Colors.white,
           fontSize: 16,

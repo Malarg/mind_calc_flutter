@@ -44,27 +44,32 @@ class _HistoryScreenState extends WidgetState<HistoryScreenWidgetModel> {
         backgroundColor: ProjectColors.iceBlue,
       ),
       backgroundColor: ProjectColors.iceBlue,
-      body: SingleChildScrollView(
-        child: StreamedStateBuilder(
-          streamedState: wm.calculationsState,
-          builder:
-              (context, List<Tuple2<Training, Tuple2<int, int>>> trainings) {
-            return Column(
-              children: List.generate(trainings.length, (i) {
-                var training = trainings[trainings.length - i - 1].item1;
-                var trainingResult = trainings[trainings.length - i - 1].item2;
+      body: StreamedStateBuilder(
+        streamedState: wm.calculationsState,
+        builder: (context, EntityState<List<Tuple2<Training, Tuple2<int, int>>>> trainings) {
+          if (trainings.isLoading) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (trainings.data.isEmpty) {
+            return Center(child: Text("Нет тут ничего"),);
+          }
+          return SingleChildScrollView(
+            child: Column(
+              children: List.generate(trainings.data.length, (i) {
+                var training = trainings.data[trainings.data.length - i - 1].item1;
+                var trainingResult = trainings.data[trainings.data.length - i - 1].item2;
                 var shouldShowDate = i == 0 ||
                     training.startTime.day !=
-                        trainings[trainings.length - i].item1.startTime.day;
+                        trainings.data[trainings.data.length - i].item1.startTime.day;
                 return buildTrainingItem(
                   training,
                   trainingResult,
                   shouldShowDate,
                 );
               }),
-            );
-          },
-        ),
+            ),
+          );
+        },
       ),
     );
   }
