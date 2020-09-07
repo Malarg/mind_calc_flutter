@@ -42,6 +42,7 @@ class HistoryScreenWidgetModel extends WidgetModel {
           unawaited(calculationsState.content(trainingsWithAnswers));
         });
       });
+      unawaited(calculationsState.content(trainingsWithAnswers));
     });
   }
 

@@ -7,7 +7,7 @@ class RoundedRectangeBackground extends StatelessWidget {
   RoundedRectangeBackground({
     @required this.child,
     this.color = Colors.white,
-    this.padding = const EdgeInsets.fromLTRB(32, 16, 32, 12),
+    this.padding = const EdgeInsets.fromLTRB(24, 16, 24, 12),
   });
   @override
   Widget build(BuildContext context) {

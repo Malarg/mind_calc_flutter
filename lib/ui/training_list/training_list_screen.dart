@@ -39,17 +39,17 @@ class _TrainingListScreenState
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            _buildCompetitionBlockButton(
-              Assets.dashboard,
-              loc.main.leaderboard,
-              () => {},
-            ),
-            SizedBox(height: 12),
-            _buildCompetitionBlockButton(
-              Assets.dashboard,
-              loc.main.achievements,
-              () => {},
-            ),
+            // _buildCompetitionBlockButton(
+            //   Assets.dashboard,
+            //   loc.main.leaderboard,
+            //   () => {},
+            // ),
+            // SizedBox(height: 12),
+            // _buildCompetitionBlockButton(
+            //   Assets.dashboard,
+            //   loc.main.achievements,
+            //   () => {},
+            // ),
             Expanded(
               child: Container(),
             ),

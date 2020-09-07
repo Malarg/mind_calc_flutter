@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:injector/injector.dart';
 import 'package:mind_calc/data/resources/prefs_values.dart';
@@ -29,6 +30,10 @@ class _AppState extends WidgetState<AppWidgetModel> {
   @override
   void initState() {
     _navigatorKey = Injector.of<AppComponent>(context).component.navigatorKey;
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.portraitUp,
+    ]);
     super.initState();
   }
 

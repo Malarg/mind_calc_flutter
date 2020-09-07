@@ -80,6 +80,13 @@ class _HistoryScreenState extends WidgetState<HistoryScreenWidgetModel> {
     bool shouldShowDate,
   ) {
     var trainingType = getTrainingType(training);
+    
+    var hourString = training.startTime.hour.toString();
+    hourString = hourString.length == 1 ? "0$hourString" : hourString;
+
+    var minuteString = training.startTime.minute.toString();
+    minuteString = minuteString.length == 1 ? "0$minuteString" : minuteString;
+
     return Column(
       children: <Widget>[
         if (shouldShowDate)
@@ -114,7 +121,7 @@ class _HistoryScreenState extends WidgetState<HistoryScreenWidgetModel> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "${training.startTime.hour}:${training.startTime.minute}",
+                        "$hourString:$minuteString",
                         style: TextStyle(
                           color: ProjectColors.coolGrey,
                           fontSize: 12,

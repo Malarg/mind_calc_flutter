@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart' hide Action;
 import 'package:flutter/services.dart';
-import 'package:injector/injector.dart';
 import 'package:mind_calc/data/resources/colors.dart';
 import 'package:mind_calc/generated/locale_base.dart';
 import 'package:mind_calc/ui/common/widgets/rounded_rectange_background.dart';
@@ -148,7 +147,7 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
 
   Widget _buildComplexityEditModeState() {
     return RoundedRectangeBackground(
-        padding: const EdgeInsets.fromLTRB(32, 18, 32, 18),
+        padding: const EdgeInsets.fromLTRB(24, 18, 24, 18),
         child: Row(
           children: <Widget>[
             StreamedStateBuilder(
@@ -212,7 +211,7 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
   Widget _buildComplexityDisplayModeState() {
     final loc = Localizations.of<LocaleBase>(context, LocaleBase);
     return RoundedRectangeBackground(
-      padding: const EdgeInsets.fromLTRB(32, 24, 32, 24),
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
       child: Row(
         children: <Widget>[
           Text(
@@ -275,7 +274,7 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
   Widget _buildEqualityModeItem() {
     final loc = Localizations.of<LocaleBase>(context, LocaleBase);
     return RoundedRectangeBackground(
-      padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
+      padding: const EdgeInsets.fromLTRB(24, 16, 16, 16),
       child: Row(
         children: <Widget>[
           Text(
@@ -314,7 +313,7 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
   Widget _buildNotificationsItem() {
     final loc = Localizations.of<LocaleBase>(context, LocaleBase);
     return RoundedRectangeBackground(
-      padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
+      padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
       child: Column(
         children: <Widget>[
           Row(
@@ -413,7 +412,7 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
   Widget _buildAllowedOperationsItem() {
     final loc = Localizations.of<LocaleBase>(context, LocaleBase);
     return RoundedRectangeBackground(
-      padding: const EdgeInsets.fromLTRB(32, 24, 40, 24),
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -426,7 +425,8 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
               fontWeight: FontWeight.w700,
             ),
           ),
-          Row(
+          Wrap(
+            direction: Axis.horizontal,
             children: <Widget>[
               SizedBox(
                 width: 64,
@@ -447,7 +447,7 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
                         ),
                       ),
                       child: Text(
-                        "⨯",
+                        "∗",
                         style: TextStyle(
                           color: ProjectColors.cloudyBlue,
                           fontSize: 14,

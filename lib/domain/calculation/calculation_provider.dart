@@ -399,7 +399,7 @@ class CalculationProvider {
   String _splitWithMultiply(int value, Tuple2<int, int> range) {
     var item1 = _getAllDividers(value).random();
     var item2 = value ~/ item1;
-    return item1.toString() + " ⨯ " + item2.toString();
+    return item1.toString() + " ∗ " + item2.toString();
   }
 
   String _splitWithDivide(int value, Tuple2<int, int> range) {
@@ -504,7 +504,7 @@ class CalculationProvider {
       if (str[currentPosition] == "-") {
         return CalculationAction.MINUS;
       }
-      if (str[currentPosition] == "⨯") {
+      if (str[currentPosition] == "∗") {
         return CalculationAction.MULTIPLY;
       }
       if (str[currentPosition] == "÷") {

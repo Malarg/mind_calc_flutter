@@ -63,7 +63,7 @@ class DBProvider {
           "VALUES(?,?)",
           [3, "ZEN"]);
       
-      var complexity =Complexity(null, 1, DateTime.now());
+      var complexity = Complexity(null, 1, DateTime.now());
       db.insert("Complexity", complexity.toMap());
     });
   }

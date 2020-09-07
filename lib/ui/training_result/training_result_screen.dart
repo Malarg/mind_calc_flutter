@@ -72,15 +72,19 @@ class _TrainingResultScreenState
                       .replaceFirst("s2", endLevel.toString());
                   return startLevel == endLevel
                       ? Container()
-                      : Text(
-                          text,
-                          style: TextStyle(
-                            color: ProjectColors.dusc,
-                            fontSize: 14,
-                            fontFamily: "Montserrat",
-                            fontWeight: FontWeight.w500,
+                      : Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                        child: Text(
+                            text,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: ProjectColors.dusc,
+                              fontSize: 14,
+                              fontFamily: "Montserrat",
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        );
+                      );
                 },
               ),
               SizedBox(height: 32),
