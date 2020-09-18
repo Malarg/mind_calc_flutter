@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:injector/injector.dart';
 import 'package:mind_calc/data/resources/prefs_values.dart';
 import 'package:mind_calc/domain/locale/loc_delegate.dart';
@@ -26,10 +29,16 @@ class App extends MwwmWidget<AppComponent> {
 
 class _AppState extends WidgetState<AppWidgetModel> {
   GlobalKey<NavigatorState> _navigatorKey;
+  StreamSubscription<List<PurchaseDetails>> _subscription;
 
   @override
   void initState() {
     _navigatorKey = Injector.of<AppComponent>(context).component.navigatorKey;
+    final Stream purchaseUpdates =
+        InAppPurchaseConnection.instance.purchaseUpdatedStream;
+    _subscription = purchaseUpdates.listen((purchases) {
+      //
+    });
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitDown,
       DeviceOrientation.portraitUp,
@@ -43,5 +52,11 @@ class _AppState extends WidgetState<AppWidgetModel> {
         navigatorKey: _navigatorKey,
         localizationsDelegates: [const LocDelegate()],
         home: MainScreen());
+  }
+
+  @override
+  void dispose() {
+    _subscription.cancel();
+    super.dispose();
   }
 }

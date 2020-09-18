@@ -35,6 +35,15 @@ dependencies:
   flutter_local_notifications: ^1.4.4+4
   pedantic: ^1.9.0
   share: ^0.6.5
+  in_app_purchase: ^0.3.4+5
+  flutter_launcher_icons: ^0.8.0
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path: "assets/icon.png"
+  adaptive_icon_background: "assets/adaptive_icon_bg.png"
+  adaptive_icon_foreground: "assets/adaptive_icon_fg.png"
 
 
   # The following adds the Cupertino Icons font to your application.

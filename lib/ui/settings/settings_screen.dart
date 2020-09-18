@@ -34,63 +34,71 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
   Widget build(BuildContext context) {
     final loc = Localizations.of<LocaleBase>(context, LocaleBase);
     return StreamedStateBuilder(
-        streamedState: wm.languageState,
-        builder: (c, langId) {
-          return Scaffold(
-            appBar: AppBar(
-              title: Center(
-                child: Text(
-                  loc.main.settings,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: ProjectColors.dusc,
-                    fontSize: 20,
-                    fontFamily: "Montserrat",
-                    fontWeight: FontWeight.w700,
+      streamedState: wm.isPremiumEnabledState,
+      builder: (_, isPremiumEnabled) {
+        return StreamedStateBuilder(
+            streamedState: wm.languageState,
+            builder: (c, langId) {
+              return Scaffold(
+                appBar: AppBar(
+                  title: Center(
+                    child: Text(
+                      loc.main.settings,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: ProjectColors.dusc,
+                        fontSize: 20,
+                        fontFamily: "Montserrat",
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  backgroundColor: ProjectColors.iceBlue,
+                ),
+                backgroundColor: ProjectColors.iceBlue,
+                body: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        _buildLanguageItem(langId),
+                        SizedBox(height: 12),
+                        _buildComplexityItem(isPremiumEnabled),
+                        SizedBox(height: 12),
+                        _buildEqualityModeItem(isPremiumEnabled),
+                        SizedBox(height: 12),
+                        //_buildNotificationsItem(),
+                        //SizedBox(height: 12),
+                        _buildAllowedOperationsItem(isPremiumEnabled),
+                        SizedBox(height: 24),
+                        _buildBuyProItem(),
+                        SizedBox(height: 12),
+                        _buildShareItem()
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              backgroundColor: ProjectColors.iceBlue,
-            ),
-            backgroundColor: ProjectColors.iceBlue,
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 24, 16, 24),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    _buildLanguageItem(langId),
-                    SizedBox(height: 12),
-                    _buildComplexityItem(),
-                    SizedBox(height: 12),
-                    _buildEqualityModeItem(),
-                    SizedBox(height: 12),
-                    //_buildNotificationsItem(),
-                    //SizedBox(height: 12),
-                    _buildAllowedOperationsItem(),
-                    SizedBox(height: 24),
-                    _buildBuyProItem(),
-                    SizedBox(height: 12),
-                    _buildShareItem()
-                  ],
-                ),
-              ),
-            ),
-          );
-        });
+              );
+            });
+      },
+    );
   }
 
   Widget _buildLanguageItem(int langId) {
     final loc = Localizations.of<LocaleBase>(context, LocaleBase);
     var langString = "";
     switch (langId) {
-      case ENGLISH_ID: {
-        langString = loc.main.english;
-      } break;
-      case RUSSIAN_ID: {
-        langString = loc.main.russian;
-      }
+      case ENGLISH_ID:
+        {
+          langString = loc.main.english;
+        }
+        break;
+      case RUSSIAN_ID:
+        {
+          langString = loc.main.russian;
+        }
     }
     return RoundedRectangeBackground(
       child: Row(
@@ -132,14 +140,14 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
     );
   }
 
-  Widget _buildComplexityItem() {
+  Widget _buildComplexityItem(bool isPremiumEnabled) {
     return StreamedStateBuilder(
       streamedState: wm.isComplexityEditModeState,
       builder: (_, isEditMode) {
         if (isEditMode) {
           return _buildComplexityEditModeState();
         } else {
-          return _buildComplexityDisplayModeState();
+          return _buildComplexityDisplayModeState(isPremiumEnabled);
         }
       },
     );
@@ -208,7 +216,7 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
         ));
   }
 
-  Widget _buildComplexityDisplayModeState() {
+  Widget _buildComplexityDisplayModeState(bool isPremiumEnabled) {
     final loc = Localizations.of<LocaleBase>(context, LocaleBase);
     return RoundedRectangeBackground(
       padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
@@ -223,6 +231,10 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
               fontWeight: FontWeight.w700,
             ),
           ),
+          SizedBox(
+            width: 12,
+          ),
+          if (!isPremiumEnabled) _buildProLabel(),
           Expanded(
             child: Container(),
           ),
@@ -251,10 +263,14 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
             width: 48,
             child: FlatButton(
               onPressed: () {
-                wm.showComplexityEditModeAction();
+                if (isPremiumEnabled) {
+                  wm.showComplexityEditModeAction();
+                }
               },
               padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-              color: ProjectColors.warmBlue,
+              color: isPremiumEnabled
+                  ? ProjectColors.warmBlue
+                  : ProjectColors.cloudyBlue,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(20),
@@ -271,7 +287,7 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
     );
   }
 
-  Widget _buildEqualityModeItem() {
+  Widget _buildEqualityModeItem(bool isPremiumEnabled) {
     final loc = Localizations.of<LocaleBase>(context, LocaleBase);
     return RoundedRectangeBackground(
       padding: const EdgeInsets.fromLTRB(24, 16, 16, 16),
@@ -286,6 +302,10 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
               fontWeight: FontWeight.w700,
             ),
           ),
+          SizedBox(
+            width: 12,
+          ),
+          if (!isPremiumEnabled) _buildProLabel(),
           Expanded(
             child: Container(),
           ),
@@ -298,7 +318,9 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
               return Switch(
                 value: isEnabled,
                 onChanged: (bool value) {
-                  wm.equalityModeChangedAction.accept(value);
+                  if (isPremiumEnabled) {
+                    wm.equalityModeChangedAction.accept(value);
+                  }
                 },
                 activeColor: ProjectColors.greenBlue,
                 inactiveThumbColor: ProjectColors.iceBlue,
@@ -409,21 +431,32 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
     );
   }
 
-  Widget _buildAllowedOperationsItem() {
+  Widget _buildAllowedOperationsItem(bool isPremiumEnabled) {
     final loc = Localizations.of<LocaleBase>(context, LocaleBase);
     return RoundedRectangeBackground(
       padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text(
-            "${loc.main.allowedOperations}",
-            style: TextStyle(
-              color: ProjectColors.duscTwo,
-              fontSize: 16,
-              fontFamily: "Montserrat",
-              fontWeight: FontWeight.w700,
-            ),
+          Row(
+            children: <Widget>[
+              Text(
+                "${loc.main.allowedOperations}",
+                style: TextStyle(
+                  color: ProjectColors.duscTwo,
+                  fontSize: 16,
+                  fontFamily: "Montserrat",
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              SizedBox(
+                width: 12,
+              ),
+              if (!isPremiumEnabled) _buildProLabel(),
+            ],
+          ),
+          SizedBox(
+            height: 4,
           ),
           Wrap(
             direction: Axis.horizontal,
@@ -435,12 +468,12 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
                   builder: (_, isEnabled) {
                     return FlatButton(
                       onPressed: () {
-                        wm.multiplyButtonClickedAction.accept();
+                        if (isPremiumEnabled) {
+                          wm.multiplyButtonClickedAction.accept();
+                        }
                       },
                       padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                      color: isEnabled ?? false
-                          ? ProjectColors.warmBlue
-                          : ProjectColors.paleGrey28,
+                      color: getActionColor(isEnabled, isPremiumEnabled),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(20),
@@ -449,7 +482,7 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
                       child: Text(
                         "∗",
                         style: TextStyle(
-                          color: ProjectColors.cloudyBlue,
+                          color: isEnabled ? Colors.white : ProjectColors.cloudyBlue,
                           fontSize: 14,
                           fontFamily: "Montserrat",
                           fontWeight: FontWeight.w500,
@@ -469,12 +502,12 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
                   builder: (_, isEnabled) {
                     return FlatButton(
                       onPressed: () {
-                        wm.divideButtonClickedAction.accept();
+                        if (isPremiumEnabled) {
+                          wm.divideButtonClickedAction.accept();
+                        }
                       },
                       padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                      color: isEnabled ?? false
-                          ? ProjectColors.warmBlue
-                          : ProjectColors.paleGrey28,
+                      color: getActionColor(isEnabled, isPremiumEnabled),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(20),
@@ -483,7 +516,7 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
                       child: Text(
                         "÷",
                         style: TextStyle(
-                          color: ProjectColors.cloudyBlue,
+                          color: isEnabled ? Colors.white : ProjectColors.cloudyBlue,
                           fontSize: 14,
                           fontFamily: "Montserrat",
                           fontWeight: FontWeight.w500,
@@ -503,12 +536,12 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
                   builder: (_, isEnabled) {
                     return FlatButton(
                       onPressed: () {
-                        wm.powButtonClickedAction.accept();
+                        if (isPremiumEnabled) {
+                          wm.powButtonClickedAction.accept();
+                        }
                       },
                       padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                      color: isEnabled ?? false
-                          ? ProjectColors.warmBlue
-                          : ProjectColors.paleGrey28,
+                      color: getActionColor(isEnabled, isPremiumEnabled),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(20),
@@ -517,7 +550,7 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
                       child: Text(
                         "x ^ y",
                         style: TextStyle(
-                          color: ProjectColors.cloudyBlue,
+                          color: isEnabled ? Colors.white : ProjectColors.cloudyBlue,
                           fontSize: 14,
                           fontFamily: "Montserrat",
                           fontWeight: FontWeight.w500,
@@ -537,12 +570,12 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
                   builder: (_, isEnabled) {
                     return FlatButton(
                       onPressed: () {
-                        wm.percentButtonClickedAction.accept();
+                        if (isPremiumEnabled) {
+                          wm.percentButtonClickedAction.accept();
+                        }
                       },
                       padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                      color: isEnabled ?? false
-                          ? ProjectColors.warmBlue
-                          : ProjectColors.paleGrey28,
+                      color: getActionColor(isEnabled, isPremiumEnabled),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(
                           Radius.circular(20),
@@ -551,7 +584,7 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
                       child: Text(
                         "%",
                         style: TextStyle(
-                          color: ProjectColors.cloudyBlue,
+                          color: isEnabled ? Colors.white : ProjectColors.cloudyBlue,
                           fontSize: 14,
                           fontFamily: "Montserrat",
                           fontWeight: FontWeight.w500,
@@ -566,6 +599,18 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
         ],
       ),
     );
+  }
+
+  Color getActionColor(bool isEnabled, isPremiumEnabled) {
+    if (isEnabled ?? false) {
+      if (isPremiumEnabled) {
+        return ProjectColors.warmBlue;
+      } else {
+        return ProjectColors.cloudyBlue;
+      }
+    } else {
+      return ProjectColors.paleGrey28;
+    }
   }
 
   Widget _buildBuyProItem() {
@@ -613,6 +658,22 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
           fontWeight: FontWeight.w700,
         ),
       ),
+    );
+  }
+
+  Widget _buildProLabel() {
+    return RoundedRectangeBackground(
+      padding: EdgeInsets.fromLTRB(10, 6, 10, 6),
+      child: Text(
+        "PRO",
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 12,
+          fontFamily: "Montserrat",
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+      color: ProjectColors.salmonPink,
     );
   }
 }

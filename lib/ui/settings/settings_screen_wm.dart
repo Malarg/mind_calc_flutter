@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' hide Action;
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:mind_calc/ui/select_language/select_language_route.dart';
 import 'package:mwwm/mwwm.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,6 +11,8 @@ import '../../data/resources/prefs_values.dart';
 class SettingsWidgetModel extends WidgetModel {
   final NavigatorState _navigator;
   SharedPreferences prefs;
+
+  final StreamedState<bool> isPremiumEnabledState = StreamedState(true);
 
   final Action<void> changeLanguageAction = Action();
   final StreamedState<int> languageState = StreamedState();
@@ -48,7 +51,7 @@ class SettingsWidgetModel extends WidgetModel {
   void onLoad() async {
     super.onLoad();
     prefs = await SharedPreferences.getInstance();
-
+    final ProductDetailsResponse response = await InAppPurchaseConnection.instance.queryProductDetails({"pro_version"});
     languageState.accept(prefs.getInt(PrefsValues.languageId) ?? ENGLISH_ID);
 
     int currentComplexity = prefs.getInt(PrefsValues.complexity);

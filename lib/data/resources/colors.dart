@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class ProjectColors {
   static const Color warmBlue = Color(0xff3c5be6);
+  static const Color warmBlue50 = Color(0x803c5be6);
   static const Color cloudyBlue = Color(0xffb6c0cd);
   static const Color iceBlue = Color(0xfff3f8ff);
   static const Color purpleishBlue = Color(0xff4766ee);

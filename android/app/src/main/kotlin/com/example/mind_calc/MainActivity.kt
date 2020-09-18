@@ -1,4 +1,4 @@
-package com.example.mind_calc
+package com.malarg.mind_calc
 
 import io.flutter.embedding.android.FlutterActivity
 
