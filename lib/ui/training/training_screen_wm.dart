@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart' show NavigatorState;
+import 'package:get_storage/get_storage.dart';
 import 'package:mind_calc/data/db/db_provider.dart';
 import 'package:mind_calc/data/models/calculation.dart';
 import 'package:mind_calc/data/models/complexity.dart';
@@ -11,7 +12,6 @@ import 'package:mind_calc/ui/pause/pause_screen_route.dart';
 import 'package:mind_calc/ui/training/training_session_handler.dart';
 import 'package:mind_calc/ui/training_result/training_result_screen_route.dart';
 import 'package:mwwm/mwwm.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:surf_mwwm/surf_mwwm.dart';
 import 'package:surf_util/surf_util.dart';
@@ -23,7 +23,6 @@ class TrainingScreenWidgetModel extends WidgetModel {
   String _currentText = "";
   CalculationProvider _calculationProvider;
   TrainingTypeEnum _type;
-  SharedPreferences prefs;
   Database db;
   int _correctAnswersChainLenght = 0;
   Training training;
@@ -47,9 +46,8 @@ class TrainingScreenWidgetModel extends WidgetModel {
 
   @override
   void onLoad() async {
-    prefs = await SharedPreferences.getInstance();
     _insertTraining();
-    _calculationProvider = CalculationProvider(prefs);
+    _calculationProvider = CalculationProvider();
     _createComplexityIfNeed();
     _generateCalc();
     super.onLoad();
@@ -118,7 +116,7 @@ class TrainingScreenWidgetModel extends WidgetModel {
         _currentText == calculationState.value.item2.toString();
     isLastCalculationCorrectState.accept(isCalculationCorrect);
 
-    int currentComplexity = prefs.getInt(PrefsValues.complexity);
+    int currentComplexity = GetStorage().read(PrefsValues.complexity);
     if (isCalculationCorrect) {
       _correctAnswersChainLenght++;
       if (_correctAnswersChainLenght >= 3) {
@@ -128,7 +126,7 @@ class TrainingScreenWidgetModel extends WidgetModel {
             .abs();
         if (inSecondsTime <= 10) {
           var newComplexity = currentComplexity + 1;
-          prefs.setInt(PrefsValues.complexity, newComplexity);
+          GetStorage().write(PrefsValues.complexity, newComplexity);
           DBProvider.db.insertComplexity(
               Complexity(null, newComplexity, DateTime.now()));
         }
@@ -138,7 +136,7 @@ class TrainingScreenWidgetModel extends WidgetModel {
       var newComplexity = max(currentComplexity - 1, 1);
       DBProvider.db
           .insertComplexity(Complexity(null, newComplexity, DateTime.now()));
-      prefs.setInt(PrefsValues.complexity, newComplexity);
+      GetStorage().write(PrefsValues.complexity, newComplexity);
     }
     _lastCalculationCompleted = DateTime.now();
   }
@@ -163,17 +161,17 @@ class TrainingScreenWidgetModel extends WidgetModel {
 
   void _generateCalc() {
     var calc = _calculationProvider
-        .getCalculation(prefs.getInt(PrefsValues.complexity));
+        .getCalculation(GetStorage().read(PrefsValues.complexity));
     calculationState.accept(calc);
   }
 
   void _createComplexityIfNeed() {
     int currentComplexity;
-    if (prefs.containsKey(PrefsValues.complexity)) {
-      currentComplexity = prefs.getInt(PrefsValues.complexity);
+    if (GetStorage().hasData(PrefsValues.complexity)) {
+      currentComplexity = GetStorage().read(PrefsValues.complexity);
     } else {
       currentComplexity = 1;
-      prefs.setInt(PrefsValues.complexity, currentComplexity);
+      GetStorage().write(PrefsValues.complexity, currentComplexity);
     }
   }
 }

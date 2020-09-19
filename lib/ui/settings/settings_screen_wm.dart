@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart' hide Action;
-import 'package:in_app_purchase/in_app_purchase.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:mind_calc/data/db/db_provider.dart';
+import 'package:mind_calc/data/models/complexity.dart';
 import 'package:mind_calc/ui/select_language/select_language_route.dart';
 import 'package:mwwm/mwwm.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mind_calc/ui/select_language/select_language_screen_wm.dart';
 import 'package:surf_mwwm/surf_mwwm.dart';
 import '../../data/resources/prefs_values.dart';
@@ -10,7 +11,6 @@ import '../../data/resources/prefs_values.dart';
 /// [SettingsWidgetModel] для [SettingsScreen]
 class SettingsWidgetModel extends WidgetModel {
   final NavigatorState _navigator;
-  SharedPreferences prefs;
 
   final StreamedState<bool> isPremiumEnabledState = StreamedState(true);
 
@@ -48,22 +48,23 @@ class SettingsWidgetModel extends WidgetModel {
   ) : super(dependencies);
 
   @override
-  void onLoad() async {
+  void onLoad() {
     super.onLoad();
-    prefs = await SharedPreferences.getInstance();
-    final ProductDetailsResponse response = await InAppPurchaseConnection.instance.queryProductDetails({"pro_version"});
-    languageState.accept(prefs.getInt(PrefsValues.languageId) ?? ENGLISH_ID);
+    var prefs = GetStorage();
+    // final ProductDetailsResponse response = await InAppPurchaseConnection.instance.queryProductDetails({"pro_version"});
+    // final bool isAvailable = await InAppPurchaseConnection.instance.isAvailable();
+    languageState.accept(prefs.read(PrefsValues.languageId) ?? ENGLISH_ID);
 
-    int currentComplexity = prefs.getInt(PrefsValues.complexity);
+    int currentComplexity = prefs.read(PrefsValues.complexity);
     complexityState.accept(currentComplexity);
     complexityTextFieldState.accept(currentComplexity.toString());
 
-    isMultiplyEnabledState.accept(prefs.getBool(PrefsValues.isMultiplyEnabled));
-    isDivideEnabledState.accept(prefs.getBool(PrefsValues.isDivideEnabled));
-    isPowEnabledState.accept(prefs.getBool(PrefsValues.isPowEnabled));
-    isPercentEnabledState.accept(prefs.getBool(PrefsValues.isPercentEnabled));
+    isMultiplyEnabledState.accept(prefs.read(PrefsValues.isMultiplyEnabled));
+    isDivideEnabledState.accept(prefs.read(PrefsValues.isDivideEnabled));
+    isPowEnabledState.accept(prefs.read(PrefsValues.isPowEnabled));
+    isPercentEnabledState.accept(prefs.read(PrefsValues.isPercentEnabled));
 
-    isEqualityModeEnabledState.accept(prefs.getBool(PrefsValues.isEqualityModeEnabled));
+    isEqualityModeEnabledState.accept(prefs.read(PrefsValues.isEqualityModeEnabled));
   }
 
   @override
@@ -71,7 +72,7 @@ class SettingsWidgetModel extends WidgetModel {
     super.onBind();
     bind(changeLanguageAction, (_) { 
       _navigator.push(SelectLanguageRoute()).then((_) {
-        var langId = prefs.getInt(PrefsValues.languageId);
+        var langId = GetStorage().read(PrefsValues.languageId);
         languageState.accept(langId);
       });
     });
@@ -87,7 +88,9 @@ class SettingsWidgetModel extends WidgetModel {
             : 1;
         complexityTextFieldState.accept(newComplexity.toString());
         complexityState.accept(newComplexity);
-        prefs.setInt(PrefsValues.complexity, newComplexity);
+        GetStorage().write(PrefsValues.complexity, newComplexity);
+        DBProvider.db
+          .insertComplexity(Complexity(null, newComplexity, DateTime.now()));
       }
     });
     bind(notificationEnabledChangedAction, (value) {
@@ -95,40 +98,40 @@ class SettingsWidgetModel extends WidgetModel {
     });
     bind(equalityModeChangedAction, (value) {
       isEqualityModeEnabledState.accept(value);
-      prefs.setBool(PrefsValues.isEqualityModeEnabled, value);
+      GetStorage().write(PrefsValues.isEqualityModeEnabled, value);
      });
     bind(multiplyButtonClickedAction, (t) {
-      var newValue = !prefs.getBool(PrefsValues.isMultiplyEnabled);
-      prefs.setBool(PrefsValues.isMultiplyEnabled, newValue);
+      var newValue = !GetStorage().read(PrefsValues.isMultiplyEnabled);
+      GetStorage().write(PrefsValues.isMultiplyEnabled, newValue);
       isMultiplyEnabledState.accept(newValue);
       _setZeroActionsCounters();
     });
     bind(divideButtonClickedAction, (t) {
-      var newValue = !prefs.getBool(PrefsValues.isDivideEnabled);
-      prefs.setBool(PrefsValues.isDivideEnabled, newValue);
+      var newValue = !GetStorage().read(PrefsValues.isDivideEnabled);
+      GetStorage().write(PrefsValues.isDivideEnabled, newValue);
       isDivideEnabledState.accept(newValue);
       _setZeroActionsCounters();
     });
     bind(powButtonClickedAction, (t) {
-      var newValue = !prefs.getBool(PrefsValues.isPowEnabled);
-      prefs.setBool(PrefsValues.isPowEnabled, newValue);
+      var newValue = !GetStorage().read(PrefsValues.isPowEnabled);
+      GetStorage().write(PrefsValues.isPowEnabled, newValue);
       isPowEnabledState.accept(newValue);
       _setZeroActionsCounters();
     });
     bind(percentButtonClickedAction, (t) {
-      var newValue = !prefs.getBool(PrefsValues.isPercentEnabled);
-      prefs.setBool(PrefsValues.isPercentEnabled, newValue);
+      var newValue = !GetStorage().read(PrefsValues.isPercentEnabled);
+      GetStorage().write(PrefsValues.isPercentEnabled, newValue);
       isPercentEnabledState.accept(newValue);
       _setZeroActionsCounters();
     });
   }
 
   _setZeroActionsCounters() {
-    prefs.setInt(PrefsValues.calcPlusCount, 0);
-    prefs.setInt(PrefsValues.calcMinusCount, 0);
-    prefs.setInt(PrefsValues.calcMultiplyCount, 0);
-    prefs.setInt(PrefsValues.calcDivideCount, 0);
-    prefs.setInt(PrefsValues.calcPowCount, 0);
-    prefs.setInt(PrefsValues.calcPercentCount, 0);
+    GetStorage().write(PrefsValues.calcPlusCount, 0);
+    GetStorage().write(PrefsValues.calcMinusCount, 0);
+    GetStorage().write(PrefsValues.calcMultiplyCount, 0);
+    GetStorage().write(PrefsValues.calcDivideCount, 0);
+    GetStorage().write(PrefsValues.calcPowCount, 0);
+    GetStorage().write(PrefsValues.calcPercentCount, 0);
   }
 }

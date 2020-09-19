@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart' hide Action;
+import 'package:get_storage/get_storage.dart';
 import 'package:mind_calc/data/resources/prefs_values.dart';
 import 'package:mind_calc/domain/locale/loc_delegate.dart';
 import 'package:mind_calc/generated/locale_base.dart';
 import 'package:mwwm/mwwm.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:surf_mwwm/surf_mwwm.dart';
 
 const ENGLISH_PATH = "locales/EN_US.json";
@@ -34,9 +34,7 @@ class SelectLanguageWidgetModel extends WidgetModel {
   @override
   void onLoad() {
     super.onLoad();
-    SharedPreferences.getInstance().then((pref) {
-      selectedLanguageState.accept(pref.getInt(PrefsValues.languageId));
-    });
+    selectedLanguageState.accept(GetStorage().read(PrefsValues.languageId));
   }
 
   @override
@@ -52,8 +50,7 @@ class SelectLanguageWidgetModel extends WidgetModel {
       String languagePath = getLocalizationPath(selectedLangId);
       await loc.load(languagePath);
       selectedLanguageState.accept(selectedLangId);
-      var prefs = await SharedPreferences.getInstance();
-      prefs.setInt(PrefsValues.languageId, selectedLangId);
+      GetStorage().write(PrefsValues.languageId, selectedLangId);
     });
   }
 }

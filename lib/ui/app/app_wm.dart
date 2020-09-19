@@ -1,7 +1,7 @@
+import 'package:get_storage/get_storage.dart';
 import 'package:mind_calc/data/resources/prefs_values.dart';
 import 'package:mwwm/mwwm.dart';
 import 'package:flutter/widgets.dart' as w;
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AppWidgetModel extends WidgetModel {
   final w.GlobalKey<w.NavigatorState> _navigator;
@@ -16,16 +16,15 @@ class AppWidgetModel extends WidgetModel {
   }
 
   void _initPrefs() {
-    SharedPreferences.getInstance().then((prefs) {
       void _initIntPref(String prefName, {int value = 0}) {
-        if (prefs.getInt(prefName) == null) {
-          prefs.setInt(prefName, value);
+        if (GetStorage().read(prefName) == null) {
+          GetStorage().write(prefName, value);
         }
       }
 
       void _initBoolPref(String prefName, bool value) {
-        if (prefs.getBool(prefName) == null) {
-          prefs.setBool(prefName, value);
+        if (GetStorage().read(prefName) == null) {
+          GetStorage().write(prefName, value);
         }
       }
 
@@ -46,6 +45,5 @@ class AppWidgetModel extends WidgetModel {
       _initBoolPref(PrefsValues.isEqualityModeEnabled, false);
 
       _initIntPref(PrefsValues.languageId, value: 1);
-    });
   }
 }

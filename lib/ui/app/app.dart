@@ -5,12 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:injector/injector.dart';
-import 'package:mind_calc/data/resources/prefs_values.dart';
 import 'package:mind_calc/domain/locale/loc_delegate.dart';
 import 'package:mind_calc/ui/app/app_wm.dart';
 import 'package:mind_calc/ui/app/di/app.dart';
 import 'package:mind_calc/ui/main/main_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:surf_mwwm/surf_mwwm.dart';
 
 import 'di/app_wm_builder.dart';

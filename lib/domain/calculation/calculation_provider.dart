@@ -1,19 +1,18 @@
 import 'dart:math';
+import 'package:get_storage/get_storage.dart';
 import 'package:mind_calc/data/resources/prefs_values.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:surf_util/surf_util.dart';
 import 'package:tuple/tuple.dart';
 
 ///https://docs.google.com/document/d/1W9kCnPQCRQKW7Vb_6BdZx_uPjw66GkrTPEC8Ii6Cg6U/edit
 class CalculationProvider {
   static const double _divideCoef = 1.5;
-  SharedPreferences preferences;
 
-  CalculationProvider(this.preferences);
+  CalculationProvider();
 
   /// Возвращает пару значений, где первое - пример, второе - значение на месте "?"
   Tuple2<String, int> getCalculation(int level) {
-    var isEquationEnabled = preferences.getBool(PrefsValues.isEqualityModeEnabled);
+    var isEquationEnabled = GetStorage().read(PrefsValues.isEqualityModeEnabled);
     print("Алгоритм генерации примеров начал работу.");
 
     var calcItemCount = _getCalcItemsCount();
@@ -208,16 +207,16 @@ class CalculationProvider {
     if (_canSplitWithMinus(number, ranges.minusRange)) {
       allowedOperations.add(CalculationAction.MINUS);
     }
-    if (_canSplitWithMultiply(number, ranges.multiplyRange) && preferences.getBool(PrefsValues.isMultiplyEnabled)) {
+    if (_canSplitWithMultiply(number, ranges.multiplyRange) && GetStorage().read(PrefsValues.isMultiplyEnabled)) {
       allowedOperations.add(CalculationAction.MULTIPLY);
     }
-    if (_canSplitWithDivide(number, ranges.divideRange) && preferences.getBool(PrefsValues.isDivideEnabled)) {
+    if (_canSplitWithDivide(number, ranges.divideRange) && GetStorage().read(PrefsValues.isDivideEnabled)) {
       allowedOperations.add(CalculationAction.DIVIDE);
     }
-    if (_canSplitWithPow(number, ranges.powRange) && preferences.getBool(PrefsValues.isPowEnabled)) {
+    if (_canSplitWithPow(number, ranges.powRange) && GetStorage().read(PrefsValues.isPowEnabled)) {
       allowedOperations.add(CalculationAction.POW);
     }
-    if (_canSplitWithPercent(number, ranges.percentRange) && preferences.getBool(PrefsValues.isPercentEnabled)) {
+    if (_canSplitWithPercent(number, ranges.percentRange) && GetStorage().read(PrefsValues.isPercentEnabled)) {
       allowedOperations.add(CalculationAction.PERCENT);
     }
     return allowedOperations;
@@ -244,17 +243,17 @@ class CalculationProvider {
   List<Tuple2<CalculationAction, int>> _getTotalOperationCount() {
     List<Tuple2<CalculationAction, int>> result = [];
     result.add(Tuple2<CalculationAction, int>(CalculationAction.PLUS,
-        preferences.getInt(PrefsValues.calcPlusCount)));
+        GetStorage().read(PrefsValues.calcPlusCount)));
     result.add(Tuple2<CalculationAction, int>(CalculationAction.MINUS,
-        preferences.getInt(PrefsValues.calcMinusCount)));
+        GetStorage().read(PrefsValues.calcMinusCount)));
     result.add(Tuple2<CalculationAction, int>(CalculationAction.MULTIPLY,
-        preferences.getInt(PrefsValues.calcMultiplyCount)));
+        GetStorage().read(PrefsValues.calcMultiplyCount)));
     result.add(Tuple2<CalculationAction, int>(CalculationAction.DIVIDE,
-        preferences.getInt(PrefsValues.calcDivideCount)));
+        GetStorage().read(PrefsValues.calcDivideCount)));
     result.add(Tuple2<CalculationAction, int>(
-        CalculationAction.POW, preferences.getInt(PrefsValues.calcPowCount)));
+        CalculationAction.POW, GetStorage().read(PrefsValues.calcPowCount)));
     result.add(Tuple2<CalculationAction, int>(CalculationAction.PERCENT,
-        preferences.getInt(PrefsValues.calcPercentCount)));
+        GetStorage().read(PrefsValues.calcPercentCount)));
     result.sort((a, b) {
       if (a.item2 < b.item2) {
         return -1;
@@ -481,8 +480,8 @@ class CalculationProvider {
         }
         break;
     }
-    preferences.setInt(
-        operationPrefString, preferences.getInt(operationPrefString) + 1);
+    GetStorage().write(
+        operationPrefString, GetStorage().read(operationPrefString) + 1);
   }
 
   ///Возвращает ближайшее действие для входящей подстроки с указаной позициив указанном направлении.

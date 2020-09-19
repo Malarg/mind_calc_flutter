@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mind_calc/data/resources/prefs_values.dart';
 import 'package:mind_calc/generated/locale_base.dart';
+
+import 'package:get_storage/get_storage.dart';
 import 'package:mind_calc/ui/select_language/select_language_screen_wm.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 ///Делегат для локализации
 class LocDelegate extends LocalizationsDelegate<LocaleBase> {
@@ -14,8 +15,7 @@ class LocDelegate extends LocalizationsDelegate<LocaleBase> {
 
   @override
   Future<LocaleBase> load(Locale locale) async {
-    var prefs = await SharedPreferences.getInstance();
-    var langId = prefs.getInt(PrefsValues.languageId) ?? ENGLISH_ID;
+    var langId = GetStorage().read(PrefsValues.languageId) ?? ENGLISH_ID;
     var langPath = getLocalizationPath(langId);
     final loc = LocaleBase();
     await loc.load(langPath);
