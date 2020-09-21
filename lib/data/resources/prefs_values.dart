@@ -15,4 +15,6 @@ class PrefsValues {
   static const isEqualityModeEnabled = "is_equality_mode_enabled";
 
   static const languageId = "language_id";
+
+  static const isProPurchaced = "is_pro_purchaced";
 }

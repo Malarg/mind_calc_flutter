@@ -73,7 +73,7 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
                         //SizedBox(height: 12),
                         _buildAllowedOperationsItem(isPremiumEnabled),
                         SizedBox(height: 24),
-                        _buildBuyProItem(),
+                        _buildBuyProItem(context),
                         SizedBox(height: 12),
                         _buildShareItem()
                       ],
@@ -482,7 +482,9 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
                       child: Text(
                         "∗",
                         style: TextStyle(
-                          color: isEnabled ? Colors.white : ProjectColors.cloudyBlue,
+                          color: isEnabled
+                              ? Colors.white
+                              : ProjectColors.cloudyBlue,
                           fontSize: 14,
                           fontFamily: "Montserrat",
                           fontWeight: FontWeight.w500,
@@ -516,7 +518,9 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
                       child: Text(
                         "÷",
                         style: TextStyle(
-                          color: isEnabled ? Colors.white : ProjectColors.cloudyBlue,
+                          color: isEnabled
+                              ? Colors.white
+                              : ProjectColors.cloudyBlue,
                           fontSize: 14,
                           fontFamily: "Montserrat",
                           fontWeight: FontWeight.w500,
@@ -550,7 +554,9 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
                       child: Text(
                         "x ^ y",
                         style: TextStyle(
-                          color: isEnabled ? Colors.white : ProjectColors.cloudyBlue,
+                          color: isEnabled
+                              ? Colors.white
+                              : ProjectColors.cloudyBlue,
                           fontSize: 14,
                           fontFamily: "Montserrat",
                           fontWeight: FontWeight.w500,
@@ -584,7 +590,9 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
                       child: Text(
                         "%",
                         style: TextStyle(
-                          color: isEnabled ? Colors.white : ProjectColors.cloudyBlue,
+                          color: isEnabled
+                              ? Colors.white
+                              : ProjectColors.cloudyBlue,
                           fontSize: 14,
                           fontFamily: "Montserrat",
                           fontWeight: FontWeight.w500,
@@ -613,10 +621,25 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
     }
   }
 
-  Widget _buildBuyProItem() {
+  Widget _buildBuyProItem(BuildContext _context) {
     final loc = Localizations.of<LocaleBase>(context, LocaleBase);
     return FlatButton(
-      onPressed: () {},
+      onPressed: () {
+        showModalBottomSheet(
+            context: _context,
+            isScrollControlled: true,
+            builder: (context) {
+              return StreamedStateBuilder(
+                  streamedState: wm.productDetails,
+                  builder: (_, proItem) {
+                    if (proItem == null) {
+                      return _buildBuyProNotAvailable();
+                    } else {
+                      return _buildBuyProBottomSheet();
+                    }
+                  });
+            });
+      },
       padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
       color: ProjectColors.salmonPink,
       shape: RoundedRectangleBorder(
@@ -631,6 +654,116 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
           fontSize: 16,
           fontFamily: "Montserrat",
           fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBuyProNotAvailable() {
+    final loc = Localizations.of<LocaleBase>(context, LocaleBase);
+    final titlesTextStyle = TextStyle(
+      color: ProjectColors.duscTwo,
+      fontSize: 20,
+      fontFamily: "Montserrat",
+      fontWeight: FontWeight.w700,
+    );
+    final descTextStyle = TextStyle(
+      color: ProjectColors.duscTwo,
+      fontSize: 14,
+      fontFamily: "Montserrat",
+      fontWeight: FontWeight.w400,
+    );
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 44, 16, 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Text(
+            loc.main.proNotAvailable,
+            textAlign: TextAlign.left,
+            style: titlesTextStyle,
+          ),
+          SizedBox(height: 24),
+          Text(loc.main.proNotAvailableDesc, style: descTextStyle),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBuyProBottomSheet() {
+    final loc = Localizations.of<LocaleBase>(context, LocaleBase);
+    final titlesTextStyle = TextStyle(
+      color: ProjectColors.duscTwo,
+      fontSize: 16,
+      fontFamily: "Montserrat",
+      fontWeight: FontWeight.w700,
+    );
+    final descTextStyle = TextStyle(
+      color: ProjectColors.duscTwo,
+      fontSize: 14,
+      fontFamily: "Montserrat",
+      fontWeight: FontWeight.w400,
+    );
+    return SingleChildScrollView(
+          child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 44, 16, 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            Text(
+              loc.main.proVersionBsTitle,
+              textAlign: TextAlign.left,
+              style: TextStyle(
+                color: ProjectColors.duscTwo,
+                fontSize: 20,
+                fontFamily: "Montserrat",
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            SizedBox(height: 24),
+            Text(loc.main.disableAds, style: titlesTextStyle),
+            Text(
+              loc.main.disableAdsDesc,
+              style: descTextStyle,
+              textAlign: TextAlign.justify,
+            ),
+            SizedBox(height: 16),
+            Text(loc.main.percentTitle, style: titlesTextStyle),
+            Text(
+              loc.main.percentDesc,
+              style: descTextStyle,
+              textAlign: TextAlign.justify,
+            ),
+            SizedBox(height: 16),
+            Text(loc.main.changeComplexity, style: titlesTextStyle),
+            Text(
+              loc.main.changeComplexityDesc,
+              style: descTextStyle,
+              textAlign: TextAlign.justify,
+            ),
+            SizedBox(height: 40),
+            FlatButton(
+              onPressed: () {
+                wm.buyProItemAction.accept();
+              },
+              padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
+              color: ProjectColors.purpleishBlue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(24),
+                ),
+              ),
+              child: Text(
+                loc.main.buyPro,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontFamily: "Montserrat",
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );

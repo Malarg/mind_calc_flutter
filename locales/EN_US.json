@@ -51,6 +51,16 @@
     "selectLanguage": "Select language",
     "english": "English",
     "levelInscreaseInfoMessage": "You increase your level from s1 to s2.  Keep going!",
-    "levelDecreaseInfoMessage": "Your level has dropped from s1 to s2. Don't give up!"
+    "levelDecreaseInfoMessage": "Your level has dropped from s1 to s2. Don't give up!",
+    "proVersionBsTitle": "New features with the Pro version!",
+    "disableAds": "Completely ad-free",
+    "disableAdsDesc": "Even more comfort. With the Pro version of the app, you won't have to spend time watching commercials while using the app",
+    "percentTitle": "Learn how to calculate percentages and raise to a power",
+    "percentDesc": "Now you can practice exponentiation and percentage calculation in your app, along with other actions",
+    "changeComplexity": "Change the difficulty",
+    "changeComplexityDesc": "Do you want to challenge yourself or, on the contrary, relax? Change the level to the one you see fit. After that, the complexity of the examples will change so that you will be even more interested in solving them",
+    "buyPro": "Purchase",
+    "proNotAvailable": "Pro version is not available",
+    "proNotAvailableDesc": "Unfortunately, it is not possible to purchase the pro version at this time. Please try again later."
   }
 }

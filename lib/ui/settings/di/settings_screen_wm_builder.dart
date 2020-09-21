@@ -8,5 +8,6 @@ SettingsWidgetModel createSettingsScreenWm(context) {
   return SettingsWidgetModel(
     WidgetModelDependencies(),
     component.navigator,
+    component.dialogController
   );
 }

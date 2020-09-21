@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart' hide Action;
 import 'package:get_storage/get_storage.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:mind_calc/data/db/db_provider.dart';
 import 'package:mind_calc/data/models/complexity.dart';
+import 'package:mind_calc/ui/common/dialog/default_dialog_controller.dart';
 import 'package:mind_calc/ui/select_language/select_language_route.dart';
 import 'package:mwwm/mwwm.dart';
 import 'package:mind_calc/ui/select_language/select_language_screen_wm.dart';
@@ -11,8 +13,9 @@ import '../../data/resources/prefs_values.dart';
 /// [SettingsWidgetModel] для [SettingsScreen]
 class SettingsWidgetModel extends WidgetModel {
   final NavigatorState _navigator;
+  final DefaultDialogController dialogController;
 
-  final StreamedState<bool> isPremiumEnabledState = StreamedState(true);
+  final StreamedState<bool> isPremiumEnabledState = StreamedState();
 
   final Action<void> changeLanguageAction = Action();
   final StreamedState<int> languageState = StreamedState();
@@ -42,17 +45,18 @@ class SettingsWidgetModel extends WidgetModel {
   final StreamedState<bool> isNotificationsEnabled = StreamedState();
   final Action<bool> notificationEnabledChangedAction = Action();
 
-  SettingsWidgetModel(
-    WidgetModelDependencies dependencies,
-    this._navigator,
-  ) : super(dependencies);
+  final StreamedState<ProductDetails> productDetails = StreamedState();
+  final Action<void> buyProItemAction = Action();
+
+  SettingsWidgetModel(WidgetModelDependencies dependencies, this._navigator,
+      this.dialogController)
+      : super(dependencies);
 
   @override
-  void onLoad() {
+  void onLoad() async {
     super.onLoad();
     var prefs = GetStorage();
-    // final ProductDetailsResponse response = await InAppPurchaseConnection.instance.queryProductDetails({"pro_version"});
-    // final bool isAvailable = await InAppPurchaseConnection.instance.isAvailable();
+    isPremiumEnabledState.accept(prefs.read(PrefsValues.isProPurchaced));
     languageState.accept(prefs.read(PrefsValues.languageId) ?? ENGLISH_ID);
 
     int currentComplexity = prefs.read(PrefsValues.complexity);
@@ -64,13 +68,33 @@ class SettingsWidgetModel extends WidgetModel {
     isPowEnabledState.accept(prefs.read(PrefsValues.isPowEnabled));
     isPercentEnabledState.accept(prefs.read(PrefsValues.isPercentEnabled));
 
-    isEqualityModeEnabledState.accept(prefs.read(PrefsValues.isEqualityModeEnabled));
+    isEqualityModeEnabledState
+        .accept(prefs.read(PrefsValues.isEqualityModeEnabled));
+
+    var billingProducts = await InAppPurchaseConnection.instance
+        .queryProductDetails({"pro_version"});
+    if (billingProducts.productDetails.isNotEmpty) {
+      productDetails.accept(billingProducts.productDetails.first);
+    } else {
+      productDetails.accept(null);
+    }
+    var pastPurchaces =
+        await InAppPurchaseConnection.instance.queryPastPurchases();
+    if (pastPurchaces.pastPurchases
+        .where((element) => element.productID == "pro_version")
+        .isNotEmpty) {
+          prefs.write(PrefsValues.isProPurchaced, true);
+          isPremiumEnabledState.accept(true);
+        } else {
+          prefs.write(PrefsValues.isProPurchaced, false);
+          isPremiumEnabledState.accept(false);
+        }
   }
 
   @override
   void onBind() {
     super.onBind();
-    bind(changeLanguageAction, (_) { 
+    bind(changeLanguageAction, (_) {
       _navigator.push(SelectLanguageRoute()).then((_) {
         var langId = GetStorage().read(PrefsValues.languageId);
         languageState.accept(langId);
@@ -90,7 +114,7 @@ class SettingsWidgetModel extends WidgetModel {
         complexityState.accept(newComplexity);
         GetStorage().write(PrefsValues.complexity, newComplexity);
         DBProvider.db
-          .insertComplexity(Complexity(null, newComplexity, DateTime.now()));
+            .insertComplexity(Complexity(null, newComplexity, DateTime.now()));
       }
     });
     bind(notificationEnabledChangedAction, (value) {
@@ -99,7 +123,7 @@ class SettingsWidgetModel extends WidgetModel {
     bind(equalityModeChangedAction, (value) {
       isEqualityModeEnabledState.accept(value);
       GetStorage().write(PrefsValues.isEqualityModeEnabled, value);
-     });
+    });
     bind(multiplyButtonClickedAction, (t) {
       var newValue = !GetStorage().read(PrefsValues.isMultiplyEnabled);
       GetStorage().write(PrefsValues.isMultiplyEnabled, newValue);
@@ -123,6 +147,14 @@ class SettingsWidgetModel extends WidgetModel {
       GetStorage().write(PrefsValues.isPercentEnabled, newValue);
       isPercentEnabledState.accept(newValue);
       _setZeroActionsCounters();
+    });
+
+    bind(buyProItemAction, (_) {
+      InAppPurchaseConnection.instance.buyConsumable(
+        purchaseParam: PurchaseParam(
+          productDetails: productDetails.value,
+        ),
+      );
     });
   }
 

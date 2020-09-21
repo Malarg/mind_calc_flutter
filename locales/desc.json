@@ -51,6 +51,16 @@
     "selectLanguage": "",
     "english": "",
     "levelInscreaseInfoMessage": "",
-    "levelDecreaseInfoMessage": ""
+    "levelDecreaseInfoMessage": "",
+    "proVersionBsTitle": "",
+    "disableAds": "",
+    "disableAdsDesc": "",
+    "percentTitle": "",
+    "percentDesc": "",
+    "changeComplexity": "",
+    "changeComplexityDesc": "",
+    "buyPro": "",
+    "proNotAvailable": "",
+    "proNotAvailableDesc": ""
   }
 }

@@ -81,4 +81,14 @@ class Localemain {
   String get english => _data["english"];
   String get levelInscreaseInfoMessage => _data["levelInscreaseInfoMessage"];
   String get levelDecreaseInfoMessage => _data["levelDecreaseInfoMessage"];
+  String get proVersionBsTitle => _data["proVersionBsTitle"];
+  String get disableAds => _data["disableAds"];
+  String get disableAdsDesc => _data["disableAdsDesc"];
+  String get percentTitle => _data["percentTitle"];
+  String get percentDesc => _data["percentDesc"];
+  String get changeComplexity => _data["changeComplexity"];
+  String get changeComplexityDesc => _data["changeComplexityDesc"];
+  String get buyPro => _data["buyPro"];
+  String get proNotAvailable => _data["proNotAvailable"];
+  String get proNotAvailableDesc => _data["proNotAvailableDesc"];
 }

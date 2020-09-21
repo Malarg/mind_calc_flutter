@@ -45,5 +45,7 @@ class AppWidgetModel extends WidgetModel {
       _initBoolPref(PrefsValues.isEqualityModeEnabled, false);
 
       _initIntPref(PrefsValues.languageId, value: 1);
+
+      _initBoolPref(PrefsValues.isProPurchaced, false);
   }
 }
