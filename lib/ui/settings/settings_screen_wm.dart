@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart' hide Action;
 import 'package:get_storage/get_storage.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
@@ -14,6 +15,7 @@ import '../../data/resources/prefs_values.dart';
 class SettingsWidgetModel extends WidgetModel {
   final NavigatorState _navigator;
   final DefaultDialogController dialogController;
+  StreamSubscription<List<PurchaseDetails>> _subscription;
 
   final StreamedState<bool> isPremiumEnabledState = StreamedState();
 
@@ -74,21 +76,35 @@ class SettingsWidgetModel extends WidgetModel {
     var billingProducts = await InAppPurchaseConnection.instance
         .queryProductDetails({"pro_version"});
     if (billingProducts.productDetails.isNotEmpty) {
-      productDetails.accept(billingProducts.productDetails.first);
+      var proMode = billingProducts.productDetails
+          .firstWhere((e) => e.id == "pro_version");
+      productDetails.accept(proMode);
+      if (proMode.skuDetail.isRewarded ?? false) {
+        prefs.write(PrefsValues.isProPurchaced, true);
+        isPremiumEnabledState.accept(true);
+      }
     } else {
       productDetails.accept(null);
     }
-    var pastPurchaces =
-        await InAppPurchaseConnection.instance.queryPastPurchases();
-    if (pastPurchaces.pastPurchases
-        .where((element) => element.productID == "pro_version")
-        .isNotEmpty) {
+    var stream = InAppPurchaseConnection.instance.purchaseUpdatedStream;
+    _subscription = stream.listen((purchases) {
+      purchases.forEach((purchase) {
+        if (purchase.pendingCompletePurchase) {
+          InAppPurchaseConnection.instance.completePurchase(purchase);
           prefs.write(PrefsValues.isProPurchaced, true);
           isPremiumEnabledState.accept(true);
-        } else {
-          prefs.write(PrefsValues.isProPurchaced, false);
-          isPremiumEnabledState.accept(false);
+          _subscription.cancel();
         }
+      });
+    }, onDone: () {
+      _subscription.cancel();
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _subscription.cancel();
   }
 
   @override
@@ -150,7 +166,7 @@ class SettingsWidgetModel extends WidgetModel {
     });
 
     bind(buyProItemAction, (_) {
-      InAppPurchaseConnection.instance.buyConsumable(
+      InAppPurchaseConnection.instance.buyNonConsumable(
         purchaseParam: PurchaseParam(
           productDetails: productDetails.value,
         ),

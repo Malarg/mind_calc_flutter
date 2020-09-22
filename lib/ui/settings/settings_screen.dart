@@ -67,14 +67,14 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
                         SizedBox(height: 12),
                         _buildComplexityItem(isPremiumEnabled),
                         SizedBox(height: 12),
-                        _buildEqualityModeItem(isPremiumEnabled),
+                        _buildEqualityModeItem(),
                         SizedBox(height: 12),
                         //_buildNotificationsItem(),
                         //SizedBox(height: 12),
                         _buildAllowedOperationsItem(isPremiumEnabled),
                         SizedBox(height: 24),
-                        _buildBuyProItem(context),
-                        SizedBox(height: 12),
+                        if (!isPremiumEnabled) _buildBuyProItem(context),
+                        if (!isPremiumEnabled) SizedBox(height: 12),
                         _buildShareItem()
                       ],
                     ),
@@ -287,7 +287,7 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
     );
   }
 
-  Widget _buildEqualityModeItem(bool isPremiumEnabled) {
+  Widget _buildEqualityModeItem() {
     final loc = Localizations.of<LocaleBase>(context, LocaleBase);
     return RoundedRectangeBackground(
       padding: const EdgeInsets.fromLTRB(24, 16, 16, 16),
@@ -305,7 +305,6 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
           SizedBox(
             width: 12,
           ),
-          if (!isPremiumEnabled) _buildProLabel(),
           Expanded(
             child: Container(),
           ),
@@ -318,9 +317,7 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
               return Switch(
                 value: isEnabled,
                 onChanged: (bool value) {
-                  if (isPremiumEnabled) {
                     wm.equalityModeChangedAction.accept(value);
-                  }
                 },
                 activeColor: ProjectColors.greenBlue,
                 inactiveThumbColor: ProjectColors.iceBlue,
