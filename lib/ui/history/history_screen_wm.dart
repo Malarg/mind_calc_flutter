@@ -23,27 +23,24 @@ class HistoryScreenWidgetModel extends WidgetModel {
       : super(baseDependencies);
 
   @override
-  void onLoad() {
+  void onLoad() async {
     super.onLoad();
     calculationsState.loading();
-    DBProvider.db.getTrainings().then((trainings) {
-      var trainingsWithAnswers = List<Tuple2<Training, Tuple2<int, int>>>();
-      trainings.forEach((training) {
-        DBProvider.db
-            .getCalculationsByTrainingId(training.id)
-            .then((calculations) {
-          if (calculations.isNotEmpty) {
-            var correctAnswers =
-                calculations.where((calc) => calc.answer == calc.result).length;
-            var wrongAnswers = calculations.length - correctAnswers;
-            trainingsWithAnswers.add(Tuple2<Training, Tuple2<int, int>>(
-                training, Tuple2<int, int>(correctAnswers, wrongAnswers)));
-          }
-          unawaited(calculationsState.content(trainingsWithAnswers));
-        });
-      });
-      unawaited(calculationsState.content(trainingsWithAnswers));
+    var trainings = await DBProvider.db.getTrainings();
+    var allCalculations = await DBProvider.db.getCalculations();
+    var trainingsWithAnswers = List<Tuple2<Training, Tuple2<int, int>>>();
+    trainings.forEach((training) {
+      var calculations = allCalculations.where((c) => c.training.id == training.id);
+        if (calculations.isNotEmpty) {
+          var correctAnswers =
+              calculations.where((calc) => calc.answer == calc.result).length;
+          var wrongAnswers = calculations.length - correctAnswers;
+          trainingsWithAnswers.add(Tuple2<Training, Tuple2<int, int>>(
+              training, Tuple2<int, int>(correctAnswers, wrongAnswers)));
+        }
+        unawaited(calculationsState.content(trainingsWithAnswers));
     });
+    unawaited(calculationsState.content(trainingsWithAnswers));
   }
 
   @override

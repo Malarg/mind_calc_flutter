@@ -61,6 +61,15 @@
     "changeComplexityDesc": "",
     "buyPro": "",
     "proNotAvailable": "",
-    "proNotAvailableDesc": ""
+    "proNotAvailableDesc": "",
+    "restorePurchase": "",
+    "congratilations": "",
+    "proPurchased": "",
+    "close": "",
+    "error": "",
+    "restoreNotAvailable": "",
+    "buyProErrorDesc": "",
+    "powAndPercentsTitle": "",
+    "powAndPercentsDescription": ""
   }
 }

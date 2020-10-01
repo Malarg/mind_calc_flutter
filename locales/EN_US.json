@@ -61,6 +61,15 @@
     "changeComplexityDesc": "Do you want to challenge yourself or, on the contrary, relax? Change the level to the one you see fit. After that, the complexity of the examples will change so that you will be even more interested in solving them",
     "buyPro": "Purchase",
     "proNotAvailable": "Pro version is not available",
-    "proNotAvailableDesc": "Unfortunately, it is not possible to purchase the pro version at this time. Please try again later."
+    "proNotAvailableDesc": "Unfortunately, it is not possible to purchase the pro version at this time. Please try again later.",
+    "restorePurchase": "Restore purchase",
+    "congratilations": "Congratulations",
+    "proPurchased": "Now you are using the Pro version of the app",
+    "close": "Close",
+    "error": "Error",
+    "restoreNotAvailable": "Unfortunately, the pro version of the app was not previously purchased on your account. Make sure that you are using the same account that you used to make the purchase earlier.",
+    "buyProErrorDesc": "You can't purchase the pro version. You may not have enough funds in your account, or you may have already purchased the pro version of the app. Try to restore your purchases.",
+    "powAndPercentsTitle": "Calculate the percentage, and exponentiation",
+    "powAndPercentsDescription": "Congratulations, now you can calculate the percentage and exponentiation. In our application, these operations have their own record.\n\nExponentiation:\nx ^ y = x * x * ... * x (y times)\nExample:\n2 ^ 4 = 2 * 2 * 2 * 2 = 16\n\nCalculating the percentage:\nx % y = (x / 100) * y\nExample:\n50 % 16 = (50 / 100) * 16 = 0.5 * 16 = 8"
   }
 }

@@ -29,6 +29,8 @@ class Training {
     this.duration,
   );
 
+  Training.justId(this.id);
+
   Map<String, dynamic> toMap() {
     return {
       "id": id,

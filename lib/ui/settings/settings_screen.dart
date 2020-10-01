@@ -73,8 +73,10 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
                         //SizedBox(height: 12),
                         _buildAllowedOperationsItem(isPremiumEnabled),
                         SizedBox(height: 24),
-                        if (!isPremiumEnabled) _buildBuyProItem(context),
-                        if (!isPremiumEnabled) SizedBox(height: 12),
+                        if (!isPremiumEnabled)
+                          _buildBuyProItem(context),
+                        if (!isPremiumEnabled)
+                          SizedBox(height: 12),
                         _buildShareItem()
                       ],
                     ),
@@ -317,7 +319,7 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
               return Switch(
                 value: isEnabled,
                 onChanged: (bool value) {
-                    wm.equalityModeChangedAction.accept(value);
+                  wm.equalityModeChangedAction.accept(value);
                 },
                 activeColor: ProjectColors.greenBlue,
                 inactiveThumbColor: ProjectColors.iceBlue,
@@ -548,16 +550,33 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
                           Radius.circular(20),
                         ),
                       ),
-                      child: Text(
-                        "x ^ y",
-                        style: TextStyle(
-                          color: isEnabled
-                              ? Colors.white
-                              : ProjectColors.cloudyBlue,
-                          fontSize: 14,
-                          fontFamily: "Montserrat",
-                          fontWeight: FontWeight.w500,
-                        ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            "x",
+                            style: TextStyle(
+                              color: isEnabled
+                                  ? Colors.white
+                                  : ProjectColors.cloudyBlue,
+                              fontSize: 14,
+                              fontFamily: "Montserrat",
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Text(
+                            "y",
+                            style: TextStyle(
+                              color: isEnabled
+                                  ? Colors.white
+                                  : ProjectColors.cloudyBlue,
+                              fontSize: 8,
+                              fontFamily: "Montserrat",
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       ),
                     );
                   },
@@ -702,7 +721,7 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
       fontWeight: FontWeight.w400,
     );
     return SingleChildScrollView(
-          child: Padding(
+      child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 44, 16, 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -741,6 +760,30 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
             SizedBox(height: 40),
             FlatButton(
               onPressed: () {
+                Navigator.pop(context);
+                wm.restorePurchasesAction.accept();
+              },
+              padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
+              color: ProjectColors.purpleishBlue,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(24),
+                ),
+              ),
+              child: Text(
+                loc.main.restorePurchase,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontFamily: "Montserrat",
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            SizedBox(height: 16),
+            FlatButton(
+              onPressed: () {
+                Navigator.pop(context);
                 wm.buyProItemAction.accept();
               },
               padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),

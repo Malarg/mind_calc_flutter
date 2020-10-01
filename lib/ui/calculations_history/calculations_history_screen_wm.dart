@@ -26,7 +26,7 @@ class CalculationsHistoryWidgetModel extends WidgetModel {
   void onLoad() {
     super.onLoad();
     DBProvider.db
-        .getCalculationsByTrainingId(_training.id)
+        .getCalculationsByTraining(_training)
         .then((calculations) {
       calculationsState
           .accept(Tuple2<Training, List<Calculation>>(_training, calculations));

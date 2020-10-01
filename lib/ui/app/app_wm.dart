@@ -41,11 +41,9 @@ class AppWidgetModel extends WidgetModel {
       _initBoolPref(PrefsValues.isDivideEnabled, true);
       _initBoolPref(PrefsValues.isPowEnabled, false);
       _initBoolPref(PrefsValues.isPercentEnabled, false);
-
       _initBoolPref(PrefsValues.isEqualityModeEnabled, false);
-
       _initIntPref(PrefsValues.languageId, value: 1);
-
       _initBoolPref(PrefsValues.isProPurchaced, false);
+      _initBoolPref(PrefsValues.isPowAndPercentDialogShown, false);
   }
 }

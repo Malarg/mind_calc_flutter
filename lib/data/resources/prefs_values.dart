@@ -17,4 +17,6 @@ class PrefsValues {
   static const languageId = "language_id";
 
   static const isProPurchaced = "is_pro_purchaced";
+
+  static const isPowAndPercentDialogShown = "is_pow_and_percent_dailog_shown";
 }

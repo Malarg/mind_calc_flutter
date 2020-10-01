@@ -91,4 +91,13 @@ class Localemain {
   String get buyPro => _data["buyPro"];
   String get proNotAvailable => _data["proNotAvailable"];
   String get proNotAvailableDesc => _data["proNotAvailableDesc"];
+  String get restorePurchase => _data["restorePurchase"];
+  String get congratilations => _data["congratilations"];
+  String get proPurchased => _data["proPurchased"];
+  String get close => _data["close"];
+  String get error => _data["error"];
+  String get restoreNotAvailable => _data["restoreNotAvailable"];
+  String get buyProErrorDesc => _data["buyProErrorDesc"];
+  String get powAndPercentsTitle => _data["powAndPercentsTitle"];
+  String get powAndPercentsDescription => _data["powAndPercentsDescription"];
 }

@@ -50,6 +50,10 @@ class SettingsWidgetModel extends WidgetModel {
   final StreamedState<ProductDetails> productDetails = StreamedState();
   final Action<void> buyProItemAction = Action();
 
+  final Action<void> restorePurchasesAction = Action();
+
+  final StreamedState<SettingsDialogType> showDialogState = StreamedState(null);
+
   SettingsWidgetModel(WidgetModelDependencies dependencies, this._navigator,
       this.dialogController)
       : super(dependencies);
@@ -60,7 +64,6 @@ class SettingsWidgetModel extends WidgetModel {
     var prefs = GetStorage();
     isPremiumEnabledState.accept(prefs.read(PrefsValues.isProPurchaced));
     languageState.accept(prefs.read(PrefsValues.languageId) ?? ENGLISH_ID);
-
     int currentComplexity = prefs.read(PrefsValues.complexity);
     complexityState.accept(currentComplexity);
     complexityTextFieldState.accept(currentComplexity.toString());
@@ -92,8 +95,13 @@ class SettingsWidgetModel extends WidgetModel {
         if (purchase.pendingCompletePurchase) {
           InAppPurchaseConnection.instance.completePurchase(purchase);
           prefs.write(PrefsValues.isProPurchaced, true);
+          dialogController.showModalSheet(SettingsDialogType.PRO_PUCHASED);
           isPremiumEnabledState.accept(true);
           _subscription.cancel();
+        }
+        if (purchase.error != null) {
+          dialogController
+              .showModalSheet(SettingsDialogType.ERROR_PURCHASE_PRO);
         }
       });
     }, onDone: () {
@@ -126,6 +134,7 @@ class SettingsWidgetModel extends WidgetModel {
         var newComplexity = complexityTextFieldChangedAction.value != ""
             ? int.parse(complexityTextFieldChangedAction.value)
             : 1;
+        newComplexity = newComplexity > 100000 ? 100000 : newComplexity;
         complexityTextFieldState.accept(newComplexity.toString());
         complexityState.accept(newComplexity);
         GetStorage().write(PrefsValues.complexity, newComplexity);
@@ -156,12 +165,14 @@ class SettingsWidgetModel extends WidgetModel {
       var newValue = !GetStorage().read(PrefsValues.isPowEnabled);
       GetStorage().write(PrefsValues.isPowEnabled, newValue);
       isPowEnabledState.accept(newValue);
+      _showPowAndPercentInfoDialogIfNeed();
       _setZeroActionsCounters();
     });
     bind(percentButtonClickedAction, (t) {
       var newValue = !GetStorage().read(PrefsValues.isPercentEnabled);
       GetStorage().write(PrefsValues.isPercentEnabled, newValue);
       isPercentEnabledState.accept(newValue);
+      _showPowAndPercentInfoDialogIfNeed();
       _setZeroActionsCounters();
     });
 
@@ -172,6 +183,29 @@ class SettingsWidgetModel extends WidgetModel {
         ),
       );
     });
+
+    bind(restorePurchasesAction, (_) async {
+      var pastPurchases =
+          await InAppPurchaseConnection.instance.queryPastPurchases();
+      var purchasedPro = pastPurchases.pastPurchases
+          .firstWhere((element) => element.productID == "pro_version");
+      if (purchasedPro != null) {
+        GetStorage().write(PrefsValues.isProPurchaced, true);
+        isPremiumEnabledState.accept(true);
+        dialogController.showModalSheet(SettingsDialogType.PRO_PUCHASED);
+      } else {
+        dialogController
+            .showModalSheet(SettingsDialogType.RESTORE_NOT_AVAILABLE);
+      }
+      print(pastPurchases);
+    });
+  }
+
+  _showPowAndPercentInfoDialogIfNeed() {
+    if (!GetStorage().read(PrefsValues.isPowAndPercentDialogShown)) {
+      GetStorage().write(PrefsValues.isPowAndPercentDialogShown, true);
+      dialogController.showSheet(SettingsDialogType.POW_AND_PERCENT_INFO);
+    }
   }
 
   _setZeroActionsCounters() {
@@ -182,4 +216,11 @@ class SettingsWidgetModel extends WidgetModel {
     GetStorage().write(PrefsValues.calcPowCount, 0);
     GetStorage().write(PrefsValues.calcPercentCount, 0);
   }
+}
+
+enum SettingsDialogType {
+  PRO_PUCHASED,
+  RESTORE_NOT_AVAILABLE,
+  ERROR_PURCHASE_PRO,
+  POW_AND_PERCENT_INFO
 }
