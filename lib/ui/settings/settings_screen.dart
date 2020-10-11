@@ -813,7 +813,8 @@ class _SettingsWidgetState extends WidgetState<SettingsWidgetModel> {
     final loc = Localizations.of<LocaleBase>(context, LocaleBase);
     return FlatButton(
       onPressed: () {
-        Share.share("text");
+        Share.share(
+            "Google play: https://play.google.com/store/apps/details?id=com.malarg.mind_calc");
       },
       padding: const EdgeInsets.fromLTRB(24, 20, 24, 20),
       color: ProjectColors.pinkishOrange,

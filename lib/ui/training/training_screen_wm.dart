@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart' show NavigatorState;
 import 'package:get_storage/get_storage.dart';
 import 'package:mind_calc/data/db/db_provider.dart';
@@ -8,6 +9,7 @@ import 'package:mind_calc/data/models/complexity.dart';
 import 'package:mind_calc/data/models/training.dart';
 import 'package:mind_calc/data/resources/prefs_values.dart';
 import 'package:mind_calc/domain/calculation/calculation_provider.dart';
+import 'package:mind_calc/ui/common/ads/ad_manager.dart';
 import 'package:mind_calc/ui/pause/pause_screen_route.dart';
 import 'package:mind_calc/ui/training/training_session_handler.dart';
 import 'package:mind_calc/ui/training_result/training_result_screen_route.dart';
@@ -40,6 +42,8 @@ class TrainingScreenWidgetModel extends WidgetModel {
   final startTimerHasBeenExpiredAction = Action<void>();
   final pauseClickedAction = Action<void>();
 
+  InterstitialAd _interstitialAd;
+
   TrainingScreenWidgetModel(
       WidgetModelDependencies baseDependencies, this._type, this._navigator)
       : super(baseDependencies);
@@ -50,6 +54,21 @@ class TrainingScreenWidgetModel extends WidgetModel {
     _calculationProvider = CalculationProvider();
     _createComplexityIfNeed();
     _generateCalc();
+          MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+        keywords: <String>['flutterio', 'beautiful apps'],
+        contentUrl: 'https://flutter.io',
+        childDirected: false,
+        testDevices: <
+            String>[], // Android emulators are considered test devices
+      );
+    _interstitialAd = InterstitialAd(
+      adUnitId: AdManager.interstitialAdUnitId,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print("InterstitialAd event is $event");
+      },
+    );
+    _interstitialAd.load();
     super.onLoad();
   }
 
@@ -71,6 +90,7 @@ class TrainingScreenWidgetModel extends WidgetModel {
         _clearText();
         _generateCalc();
       } else {
+        _showAdIfNeed();
         _finishTrainingInDb().then((value) {
           _navigator.push(TrainingResultScreenRoute(value));
         });
@@ -91,6 +111,12 @@ class TrainingScreenWidgetModel extends WidgetModel {
         trainingSessionHandler.resumeTimer();
       });
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _interstitialAd.dispose();
   }
 
   void _insertTraining() async {
@@ -172,6 +198,20 @@ class TrainingScreenWidgetModel extends WidgetModel {
     } else {
       currentComplexity = 1;
       GetStorage().write(PrefsValues.complexity, currentComplexity);
+    }
+  }
+
+  void _showAdIfNeed() async {
+    var trainings = await DBProvider.db.getTrainings();
+    var shouldShowAd =
+        trainings.length > 10 && !GetStorage().read(PrefsValues.isProPurchaced);
+    if (shouldShowAd) {
+      _interstitialAd
+        ..show(
+          anchorType: AnchorType.bottom,
+          anchorOffset: 0.0,
+          horizontalCenterOffset: 0.0,
+        );
     }
   }
 }

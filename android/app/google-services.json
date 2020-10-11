@@ -1,0 +1,41 @@
+{
+  "project_info": {
+    "project_number": "192521849211",
+    "firebase_url": "https://mind-calc-1e514.firebaseio.com",
+    "project_id": "mind-calc-1e514",
+    "storage_bucket": "mind-calc-1e514.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:192521849211:android:03d04e379c9108411455de",
+        "android_client_info": {
+          "package_name": "com.malarg.mind_calc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "192521849211-orknt1sirrdkg9ed42o9dni93ahrseqr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCWWsnRcr8_N2k2u-DcFl37cy7RnWOAHGI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "192521849211-orknt1sirrdkg9ed42o9dni93ahrseqr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-3572891441947952~3891728145"
+    }
+  ],
+  "configuration_version": "1"
+}

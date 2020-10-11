@@ -10,6 +10,7 @@ import 'package:mind_calc/ui/common/widgets/calculation_history_item.dart';
 import 'package:mind_calc/ui/training_result/di/training_result_screen_wm_builder.dart';
 import 'package:mind_calc/ui/training_result/training_result_screen_wm.dart';
 import 'package:mwwm/mwwm.dart';
+import 'package:share/share.dart';
 import 'package:surf_mwwm/surf_mwwm.dart';
 import 'di/training_result_screen_component.dart';
 
@@ -72,8 +73,8 @@ class _TrainingResultScreenState
                   return startLevel == endLevel
                       ? Container()
                       : Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                        child: Text(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+                          child: Text(
                             text,
                             textAlign: TextAlign.center,
                             style: TextStyle(
@@ -83,7 +84,7 @@ class _TrainingResultScreenState
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                      );
+                        );
                 },
               ),
               SizedBox(height: 32),
@@ -105,10 +106,15 @@ class _TrainingResultScreenState
                   ),
                   Expanded(
                     child: Center(
-                      child: SvgPicture.asset(
-                        Assets.share,
-                        color: Colors.black,
-                        height: 24,
+                      child: FlatButton(
+                        onPressed: () {
+                          Share.share("Google play: https://play.google.com/store/apps/details?id=com.malarg.mind_calc");
+                        },
+                        child: SvgPicture.asset(
+                          Assets.share,
+                          color: Colors.black,
+                          height: 24,
+                        ),
                       ),
                     ),
                   ),

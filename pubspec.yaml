@@ -37,6 +37,8 @@ dependencies:
   share: ^0.6.5
   in_app_purchase: ^0.3.4+5
   flutter_launcher_icons: ^0.8.0
+  google_fonts: ^0.3.9
+  firebase_admob: ^0.10.0+1
 
 flutter_icons:
   ios: true

@@ -1,4 +1,6 @@
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:mind_calc/data/db/db_provider.dart';
+import 'package:mind_calc/ui/common/ads/ad_manager.dart';
 import 'package:mwwm/mwwm.dart';
 import 'package:surf_util/surf_util.dart';
 import 'package:relation/relation.dart';
@@ -15,6 +17,7 @@ class MainScreenWidgetModel extends WidgetModel {
   @override
   void onLoad() async {
     super.onLoad();
+  await FirebaseAdMob.instance.initialize(appId: AdManager.appId);
     await DBProvider.db.database;
     _bindActions();
   }
